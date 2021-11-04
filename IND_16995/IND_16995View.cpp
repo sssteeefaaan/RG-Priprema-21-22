@@ -51,25 +51,58 @@ BOOL CIND16995View::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 // CIND16995View drawing
-void DrawRegularPolygon(CDC* pDC, int cx, int cy, int r, int n)
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+struct triangle {
+	POINT center;
+	int h;
+	int rot;
+	int inscribedPolygonPoints;
+	COLORREF color;
+};
+
+POINT* GetRegularPoligonPoints(int cx, int cy, int r, int n = -1, int rot = 0)
 {
-	POINT* polygon = new POINT[n + 1];
-	double angle = 8 * atan(1) / n;
+	POINT* polygon = nullptr;
+	double angle, fi;
+
+	// Ukoliko je rec o pravouglom trouglu, to se svodi na kvadrat bez x = cx + 0, y = cy - r komponente
+	// To ce biti default figura ukoliko se prosledi n < 3
+	if (n > 2)
+		angle = 2 * M_PI / n;
+	else
+	{
+		angle = M_PI / 2;
+		n = 3;
+	}
+
+	fi = rot * M_PI / 180;
+	polygon = new POINT[n + 1];
+
 	for (int i = 0; i < n; i++)
 	{
-		polygon[i].x = cx + r * cos(i * angle);
-		polygon[i].y = cy + r * sin(i * angle);
+		polygon[i].x = cx + (double)r * cos(i * angle + fi);
+		polygon[i].y = cy + (double)r * sin(i * angle + fi);
 	}
 	polygon[n] = polygon[0];
+
+	return polygon;
+}
+
+void DrawRegularPolygon(CDC* pDC, int cx, int cy, int r, int n = 3, int rot = 0)
+{
+	POINT* polygon = GetRegularPoligonPoints(cx, cy, r, n, rot);
 
 	pDC->Polygon(polygon, n + 1);
 	delete[] polygon;
 }
 
-void DrawTriangleWithInscribedPolygon(CDC* pDC, POINT* triangle, COLORREF color, int polyPoints)
+void DrawTriangleWithInscribedPolygon(CDC* pDC, struct triangle t)
 {
-	CBrush* newBrush = new CBrush(color),
+	CBrush* newBrush = new CBrush(t.color),
 		*oldBrush = pDC->SelectObject(newBrush);
+	POINT* triangle = GetRegularPoligonPoints(t.center.x, t.center.y, t.h, -1, t.rot);
 	pDC->Polygon(triangle, 4);
 
 	int a = sqrt(pow(triangle[0].x - triangle[1].x, 2) + pow(triangle[0].y - triangle[1].y, 2)),
@@ -80,9 +113,10 @@ void DrawTriangleWithInscribedPolygon(CDC* pDC, POINT* triangle, COLORREF color,
 	POINT vertex = { (a * triangle[2].x + b * triangle[0].x + c * triangle[1].x) / sum, (a * triangle[2].y + b * triangle[0].y + c * triangle[1].y) / sum };
 	double length = max(a, b, c) / 7;
 
-	DrawRegularPolygon(pDC, vertex.x, vertex.y, length, polyPoints);
+	DrawRegularPolygon(pDC, vertex.x, vertex.y, length, t.inscribedPolygonPoints);
 
 	pDC->SelectObject(oldBrush);
+	delete[] triangle;
 	delete newBrush;
 }
 
@@ -96,10 +130,10 @@ void CIND16995View::OnDraw(CDC* pDC)
 	CRect clientRect;
 	GetClientRect(&clientRect);
 
-	int mapMode = pDC->SetMapMode(MM_ISOTROPIC);
+	/*int mapMode = pDC->SetMapMode(MM_ISOTROPIC);
 	CSize windowExt = pDC->SetWindowExt(500, 500),
 	viewportExt = pDC->SetViewportExt(clientRect.Width(), clientRect.Height());
-	CPoint windowOrg = pDC->SetWindowOrg(0, 0);
+	CPoint windowOrg = pDC->SetWindowOrg(0, 0);*/
 
 	CPen* newPen = new CPen(PS_NULL, 0, RGB(255, 255, 255)),
 		* oldPen = pDC->SelectObject(newPen);
@@ -114,20 +148,34 @@ void CIND16995View::OnDraw(CDC* pDC)
 	brush.lbColor = RGB(0, 0, 255);
 	brush.lbStyle = BS_SOLID;
 
-	newPen = new CPen(PS_GEOMETRIC | PS_SOLID | PS_JOIN_ROUND, 3, &brush);
+	newPen = new CPen(PS_GEOMETRIC | PS_SOLID | PS_JOIN_ROUND, 2, &brush);
 	pDC->SelectObject(newPen);
 
-	POINT tPurple[] = { {25, 175}, {325, 175}, {25, 475}, {25, 175} };
-	POINT tYellow[] = { {325, 175}, {325, 475}, {25, 475}, {325, 175} };
-	POINT tRed[] = { {25, 175}, {175, 25}, {325, 175}, {25, 175} };
-	POINT tOrange[] = { {325, 25}, {475, 25}, {475, 175}, {325, 25} };
-	POINT tGreen[] = { {325, 325}, {475, 325}, {325, 475}, {325, 325} };
+	triangle purple = { { 175, 325 }, 212, 135, 6, RGB(180, 0, 220) },
+		yellow = { { 175, 325 }, 212, -45, 4, RGB(255, 255, 0) },
+		red = { { 175, 175 }, 150, 180, 8, RGB(255, 0, 0) },
+		orange = { { 400, 100 }, 106, -135, 5, RGB(255, 150, 0) },
+		green = { { 400, 400 }, 106, 135, 7, RGB(0, 200, 0) };
 
-	DrawTriangleWithInscribedPolygon(pDC, tPurple, RGB(180, 0, 220), 6);
-	DrawTriangleWithInscribedPolygon(pDC, tYellow, RGB(255, 255, 0), 4);
-	DrawTriangleWithInscribedPolygon(pDC, tRed, RGB(255, 0, 0), 8);
-	DrawTriangleWithInscribedPolygon(pDC, tOrange, RGB(255, 150, 0), 5);
-	DrawTriangleWithInscribedPolygon(pDC, tGreen, RGB(0, 200, 0), 7);
+	/*
+	* Mariposa
+	* 
+	triangle purple = { { 400, 250 }, 106, 135, 6, RGB(180, 0, 220) },
+		yellow = { { 101, 250 }, 106, -135, 4, RGB(255, 255, 0) },
+		red = { { 325, 250 }, 75, 90, 8, RGB(255, 0, 0) },
+		orange = { { 213, 213 }, 53, 45, 5, RGB(255, 150, 0) },
+		green = { { 213, 362 }, 53, 135, 7, RGB(0, 200, 0) };
+
+	pDC->Rectangle(175, 250, 250, 325);
+	POINT rPink[] = { {250, 250}, {325, 325}, {325, 400}, {250, 325}, {250, 250} };
+
+	*/
+
+	DrawTriangleWithInscribedPolygon(pDC, purple);
+	DrawTriangleWithInscribedPolygon(pDC, yellow);
+	DrawTriangleWithInscribedPolygon(pDC, red);
+	DrawTriangleWithInscribedPolygon(pDC, orange);
+	DrawTriangleWithInscribedPolygon(pDC, green);
 
 	newBrush = new CBrush(HS_FDIAGONAL, RGB(0, 0, 255));
 	pDC->SelectObject(newBrush);
@@ -145,10 +193,10 @@ void CIND16995View::OnDraw(CDC* pDC)
 	pDC->SelectObject(oldPen);
 	delete newPen;
 
-	pDC->SetWindowOrg(windowOrg);
+	/*pDC->SetWindowOrg(windowOrg);
 	pDC->SetViewportExt(viewportExt);
 	pDC->SetWindowExt(windowExt);
-	pDC->SetMapMode(mapMode);
+	pDC->SetMapMode(mapMode);*/
 }
 
 // CIND16995View printing
