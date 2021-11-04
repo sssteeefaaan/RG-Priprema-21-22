@@ -51,6 +51,21 @@ BOOL CIND16995View::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 // CIND16995View drawing
+void DrawRegularPolygon(CDC* pDC, int cx, int cy, int r, int n)
+{
+	POINT* polygon = new POINT[n + 1];
+	double angle = 8 * atan(1) / n;
+	for (int i = 0; i < n; i++)
+	{
+		polygon[i].x = cx + r * cos(i * angle);
+		polygon[i].y = cy + r * sin(i * angle);
+	}
+	polygon[n] = polygon[0];
+
+	pDC->Polygon(polygon, n + 1);
+	delete[] polygon;
+}
+
 void DrawTriangleWithInscribedPolygon(CDC* pDC, POINT* triangle, COLORREF color, int polyPoints)
 {
 	CBrush* newBrush = new CBrush(color),
@@ -62,19 +77,10 @@ void DrawTriangleWithInscribedPolygon(CDC* pDC, POINT* triangle, COLORREF color,
 		c = sqrt(pow(triangle[2].x - triangle[0].x, 2) + pow(triangle[2].y - triangle[0].y, 2)),
 		sum = a + b + c;
 
-	POINT polyCenter = { (a * triangle[2].x + b * triangle[0].x + c * triangle[1].x) / sum, (a * triangle[2].y + b * triangle[0].y + c * triangle[1].y) / sum };
-	POINT* polygon = new POINT[polyPoints + 1];
-	double angle = 8 * atan(1) / polyPoints;
+	POINT vertex = { (a * triangle[2].x + b * triangle[0].x + c * triangle[1].x) / sum, (a * triangle[2].y + b * triangle[0].y + c * triangle[1].y) / sum };
 	double length = max(a, b, c) / 7;
-	for (int i = 0; i < polyPoints; i++)
-	{
-		polygon[i].x = polyCenter.x + length * cos(i * angle);
-		polygon[i].y = polyCenter.y + length * sin(i * angle);
-	}
-	polygon[polyPoints] = polygon[0];
 
-	pDC->Polygon(polygon, polyPoints + 1);
-	delete[] polygon;
+	DrawRegularPolygon(pDC, vertex.x, vertex.y, length, polyPoints);
 
 	pDC->SelectObject(oldBrush);
 	delete newBrush;
