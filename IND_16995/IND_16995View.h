@@ -3,41 +3,9 @@
 //
 
 #pragma once
-
-#define _USE_MATH_DEFINES
-#include <math.h>
-
-struct DPOINT {
-	double x;
-	double y;
-};
-
-struct triangle {
-	DPOINT center;
-	double a;
-	double rot;
-	int inscribedPolygonPoints;
-	COLORREF color;
-	int HB;
-};
-
-struct square {
-	DPOINT center;
-	double a;
-	double rot;
-	COLORREF color;
-	int HB;
-};
-
-struct parallelogram {
-	DPOINT vertex;
-	double a;
-	double h;
-	double rot;
-	bool mirrorX;
-	COLORREF color;
-	int HB;
-};
+#include "RightTriangle.h"
+#include "Square.h"
+#include "Parallelogram.h"
 
 
 class CIND16995View : public CView
@@ -95,6 +63,15 @@ private:
 	COLORREF backgroundColor;
 	COLORREF penColor;
 	CRect windowSize;
+	CPen* drawingPen;
+
+	Figure* largeTriangle1;
+	Figure* largeTriangle2;
+	Figure* mediumTriangle;
+	Figure* smallTriangle1;
+	Figure* smallTriangle2;
+	Figure* square;
+	Figure* parallelogram;
 };
 
 #ifndef _DEBUG  // debug version in IND_16995View.cpp

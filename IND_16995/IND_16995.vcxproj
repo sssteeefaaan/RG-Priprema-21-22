@@ -183,26 +183,34 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Figure.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="IND_16995.h" />
     <ClInclude Include="IND_16995Doc.h" />
     <ClInclude Include="IND_16995View.h" />
     <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Parallelogram.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="RightTriangle.h" />
+    <ClInclude Include="Square.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Figure.cpp" />
     <ClCompile Include="IND_16995.cpp" />
     <ClCompile Include="IND_16995Doc.cpp" />
     <ClCompile Include="IND_16995View.cpp" />
     <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="Parallelogram.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="RightTriangle.cpp" />
+    <ClCompile Include="Square.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="IND16995.rc" />

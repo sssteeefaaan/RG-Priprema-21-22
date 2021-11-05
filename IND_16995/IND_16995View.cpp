@@ -34,16 +34,72 @@ END_MESSAGE_MAP()
 
 CIND16995View::CIND16995View() noexcept
 {
-	this->grid = false;
 	this->windowSize.SetRect({ 0,0 }, { 500, 500 });
 	this->gridCount = 20;
 	this->gridSize = 500 / 20;
 	this->backgroundColor = RGB(200, 200, 200);
 	this->penColor = RGB(0, 0, 255);
+
+	this->largeTriangle1 = new RightTriangle({ 7, 13 }, 12, gridSize, 6, penColor, RGB(180, 0, 220), 135);
+	this->largeTriangle2 = new RightTriangle({ 7, 13 }, 12, gridSize, 4, penColor, RGB(255, 255, 0), -45);
+	this->mediumTriangle = new RightTriangle({ 7, 7 }, 6 * M_SQRT2, gridSize, 8, penColor, RGB(255, 0, 0), 180);
+	this->smallTriangle1 = new RightTriangle({ 16, 4 }, 6, gridSize, 5, penColor, RGB(255, 150, 0), -135);
+	this->smallTriangle2 = new RightTriangle({ 16, 16 }, 6, gridSize, 7, penColor, RGB(0, 200, 0), 135);
+	this->square = new Square({ 16, 10 }, 6, gridSize, penColor, RGB(0, 0, 255), 45, HS_FDIAGONAL);
+	this->parallelogram = new Parallelogram({ 7, 1 }, 6, 6, gridSize, penColor, RGB(255, 185, 200));
+
+	this->grid = false;
 }
 
 CIND16995View::~CIND16995View()
 {
+	if (this->largeTriangle1 != nullptr)
+	{
+		delete this->largeTriangle1;
+		this->largeTriangle1 = nullptr;
+	}
+
+	if (this->largeTriangle2 != nullptr)
+	{
+		delete this->largeTriangle2;
+		this->largeTriangle2 = nullptr;
+	}
+
+	if (this->mediumTriangle != nullptr)
+	{
+		delete this->mediumTriangle;
+		this->mediumTriangle = nullptr;
+	}
+
+	if (this->smallTriangle1 != nullptr)
+	{
+		delete this->smallTriangle1;
+		this->smallTriangle1 = nullptr;
+	}
+
+	if (this->smallTriangle2 != nullptr)
+	{
+		delete this->smallTriangle2;
+		this->smallTriangle2 = nullptr;
+	}
+
+	if (this->square != nullptr)
+	{
+		delete this->square;
+		this->square = nullptr;
+	}
+
+	if (this->parallelogram != nullptr)
+	{
+		delete this->parallelogram;
+		this->parallelogram = nullptr;
+	}
+
+	if (this->drawingPen != nullptr)
+	{
+		delete this->drawingPen;
+		this->drawingPen = nullptr;
+	}
 }
 
 BOOL CIND16995View::PreCreateWindow(CREATESTRUCT& cs)
@@ -56,73 +112,6 @@ BOOL CIND16995View::PreCreateWindow(CREATESTRUCT& cs)
 
 // CIND16995View drawing
 
-POINT* CIND16995View::GetRegularPoligonPoints(int cx, int cy, int r, int n = -1, int rot = 0)
-{
-	POINT* polygon = nullptr;
-	double angle, fi;
-
-	// Ukoliko je rec o pravouglom trouglu, to se svodi na kvadrat bez x = cx + 0, y = cy - r komponente
-	// To ce biti default figura ukoliko se prosledi n < 3
-	if (n > 2)
-		angle = 2 * M_PI / n;
-	else
-	{
-		angle = M_PI_2;
-		n = 3;
-	}
-
-	fi = rot * M_PI / 180;
-
-	polygon = new POINT[n + 1];
-
-	for (int i = 0; i < n; i++)
-	{
-		polygon[i].x = cx + (double)r * cos(i * angle + fi);
-		polygon[i].y = cy + (double)r * sin(i * angle + fi);
-	}
-	polygon[n] = polygon[0];
-
-	return polygon;
-}
-
-POINT* CIND16995View::GetParalelogramPoints(DPOINT v, int a, int h, int rot = 0, bool mirrorX = false)
-{
-	POINT* points = new POINT[5];
-
-	double angle1 = rot * M_PI / 180,
-		angle2 = (rot - 26.5) * M_PI / 180,
-		angle3 = (rot - 45) * M_PI / 180,
-		sqrt1 = sqrt(h * h + 4 * a * a),
-		sqrt2 = sqrt(h * h + a * a);
-
-	int mirror = mirrorX ? -1 : 1;
-
-	points[0].x = points[4].x = v.x;
-	points[0].y = points[4].y = v.y;
-	points[1].x = v.x + mirror * a * cos(angle1);
-	points[1].y = v.y - a * sin(angle1);
-	points[2].x = v.x + mirror * sqrt1 * cos(angle2);
-	points[2].y = v.y - sqrt1 * sin(angle2);
-	points[3].x = v.x + mirror * sqrt2 * cos(angle3);
-	points[3].y = v.y - sqrt2 * sin(angle3);
-
-	return points;
-}
-
-double CIND16995View::GetDistance(POINT a, POINT b)
-{
-	return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
-}
-
-void CIND16995View::DrawRegularPolygon(CDC* pDC, int cx, int cy, int r, int n = 3, int rot = 0)
-{
-	POINT* polygon = GetRegularPoligonPoints(cx, cy, r, n, rot);
-
-	pDC->Polygon(polygon, n + 1);
-
-	delete[] polygon;
-}
-
 void CIND16995View::DrawBackground(CDC* pDC)
 {
 	CPen* oldPen = (CPen*) pDC->SelectStockObject(NULL_PEN);
@@ -134,78 +123,6 @@ void CIND16995View::DrawBackground(CDC* pDC)
 	pDC->SelectObject(oldBrush);
 	pDC->SelectObject(oldPen);
 
-	delete newBrush;
-}
-
-void CIND16995View::DrawTriangleWithInscribedPolygon(CDC* pDC, struct triangle t)
-{
-	CBrush* newBrush = nullptr;
-
-	if (t.HB != -1)
-		newBrush = new CBrush(t.HB, t.color);
-	else
-		newBrush = new CBrush(t.color);
-
-	CBrush* oldBrush = pDC->SelectObject(newBrush);
-
-	POINT* triangle = GetRegularPoligonPoints(t.center.x * this->gridSize, t.center.y * this->gridSize, t.a * this->gridSize * M_SQRT1_2, -1, t.rot);
-
-	pDC->Polygon(triangle, 4);
-
-	int a = this->GetDistance(triangle[0], triangle[1]),
-		b = this->GetDistance(triangle[1], triangle[2]),
-		c = this->GetDistance(triangle[2], triangle[0]),
-		sum = a + b + c;
-
-	POINT incenter = { (a * triangle[2].x + b * triangle[0].x + c * triangle[1].x) / sum, (a * triangle[2].y + b * triangle[0].y + c * triangle[1].y) / sum };
-	double length = max(a, b, c) / 7;
-
-	DrawRegularPolygon(pDC, incenter.x, incenter.y, length, t.inscribedPolygonPoints);
-
-	pDC->SelectObject(oldBrush);
-	delete[] triangle;
-	pDC->SelectObject(oldBrush);
-	delete newBrush;
-}
-
-void CIND16995View::DrawSquare(CDC* pDC, struct square s)
-{
-	CBrush* newBrush = nullptr;
-
-	if (s.HB != -1)
-		newBrush = new CBrush(s.HB, s.color);
-	else
-		newBrush = new CBrush(s.color);
-
-	CBrush * oldBrush = pDC->SelectObject(newBrush);
-
-	POINT* sPoints = this->GetRegularPoligonPoints(s.center.x * this->gridSize, s.center.y * this->gridSize, s.a * M_SQRT1_2 * this->gridSize, 4, 45);
-	pDC->Polygon(sPoints, 5);
-	delete[] sPoints;
-
-	pDC->SelectObject(oldBrush);
-	delete newBrush;
-}
-
-void CIND16995View::DrawParallelogram(CDC* pDC, struct parallelogram p)
-{
-	CBrush* newBrush = nullptr;
-
-	if (p.HB != -1)
-		newBrush = new CBrush(p.HB, p.color);
-	else
-		newBrush = new CBrush(p.color);
-
-	CBrush* oldBrush = pDC->SelectObject(newBrush);
-
-	p.vertex.x *= this->gridSize;
-	p.vertex.y *= this->gridSize;
-
-	POINT* pPoints = this->GetParalelogramPoints(p.vertex, p.a * this->gridSize, p.h * this->gridSize, p.rot, p.mirrorX);
-	pDC->Polygon(pPoints, 5);
-	delete[] pPoints;
-
-	pDC->SelectObject(oldBrush);
 	delete newBrush;
 }
 
@@ -256,48 +173,23 @@ void CIND16995View::OnDraw(CDC* pDC)
 	if (!pDoc)
 		return;
 
+	CRect rect;
+	GetClientRect(&rect);
+	CPoint viewportOrg = pDC->SetViewportOrg((rect.Width() - this->windowSize.Width()) / 2, (rect.Height() - this->windowSize.Height()) / 2);
+
 	this->DrawBackground(pDC);
 
-	LOGBRUSH logbrush;
-	logbrush.lbColor = this->penColor;
-	logbrush.lbStyle = BS_SOLID;
-
-	CPen* newPen = new CPen(PS_GEOMETRIC | PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 2, &logbrush),
-		*oldPen = pDC->SelectObject(newPen);
-
-	
-	// House
-	triangle t1 = {{7, 13}, 12, 135, 6, RGB(180, 0, 220), -1},
-		t2 = { { 7, 13 }, 12, -45, 4, RGB(255, 255, 0), -1 },
-		t3 = { { 7, 7 }, 6 * M_SQRT2, 180, 8, RGB(255, 0, 0), -1 },
-		t4 = { { 16, 4 }, 6, -135, 5, RGB(255, 150, 0), -1 },
-		t5 = { { 16, 16 }, 6, 135, 7, RGB(0, 200, 0), -1 };
-	square s = { { 16, 10}, 6, 90, RGB(0, 0, 255), HS_FDIAGONAL };
-	parallelogram p = { {7, 1}, 6, 6, 0, false, RGB(255, 185, 200), -1 };
-	
-
-	//
-	//// Mariposa
-	//triangle t1 = { { 4, 10 }, 6, -135, 5, RGB(255, 255, 0), -1 },
-	//	t2 = { { 16, 10 }, 6, 135, 8, RGB(255, 150, 0), -1 },
-	//	t3 = { { 13, 10 }, 3 * M_SQRT2, 90, 4, RGB(255, 185, 200), -1 },
-	//	t4 = { { 8.5, 8.5 }, 3, 45, 6, RGB(255, 0, 0), -1 },
-	//	t5 = { { 8.5, 14.5 }, 3, 135, 7, RGB(0, 0, 255), HS_FDIAGONAL };
-	//square s = { { 8.5, 11.5}, 3, 90, RGB(0, 255, 0), -1 };
-	//parallelogram p = { {10, 10}, 3, 3, -90, true, RGB(180, 0, 220), -1 };
-	//
-
-	this->DrawTriangleWithInscribedPolygon(pDC, t1);
-	this->DrawTriangleWithInscribedPolygon(pDC, t2);
-	this->DrawTriangleWithInscribedPolygon(pDC, t3);
-	this->DrawTriangleWithInscribedPolygon(pDC, t4);
-	this->DrawTriangleWithInscribedPolygon(pDC, t5);
-	this->DrawSquare(pDC, s);
-	this->DrawParallelogram(pDC, p);
+	this->largeTriangle1->Draw(pDC);
+	this->largeTriangle2->Draw(pDC);
+	this->mediumTriangle->Draw(pDC);
+	this->smallTriangle1->Draw(pDC);
+	this->smallTriangle2->Draw(pDC);
+	this->square->Draw(pDC);
+	this->parallelogram->Draw(pDC);
 
 	this->DrawGrid(pDC);
 
-	delete pDC->SelectObject(oldPen);
+	pDC->SetViewportOrg(viewportOrg);
 }
 
 // CIND16995View printing
