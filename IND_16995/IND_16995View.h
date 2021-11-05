@@ -4,6 +4,41 @@
 
 #pragma once
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+struct DPOINT {
+	double x;
+	double y;
+};
+
+struct triangle {
+	DPOINT center;
+	double a;
+	double rot;
+	int inscribedPolygonPoints;
+	COLORREF color;
+	int HB;
+};
+
+struct square {
+	DPOINT center;
+	double a;
+	double rot;
+	COLORREF color;
+	int HB;
+};
+
+struct parallelogram {
+	DPOINT vertex;
+	double a;
+	double h;
+	double rot;
+	bool mirrorX;
+	COLORREF color;
+	int HB;
+};
+
 
 class CIND16995View : public CView
 {
@@ -42,9 +77,24 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	void Grid(CDC*);
+	void DrawGrid(CDC*);
+	void DrawBackground(CDC* pDC);
+	void DrawRegularPolygon(CDC* pDC, int cx, int cy, int r, int n, int rot);
+	void DrawTriangleWithInscribedPolygon(CDC* pDC, struct triangle t);
+	void DrawSquare(CDC* pDC, struct square s);
+	void DrawParallelogram(CDC* pDC, struct parallelogram p);
+
+	POINT* GetRegularPoligonPoints(int cx, int cy, int r, int n, int rot);
+	POINT* GetParalelogramPoints(DPOINT vertex, int a, int h, int rot, bool mirrorX);
+	double GetDistance(POINT a, POINT b);
+
 private:
 	bool grid;
+	int gridSize;
+	int gridCount;
+	COLORREF backgroundColor;
+	COLORREF penColor;
+	CRect windowSize;
 };
 
 #ifndef _DEBUG  // debug version in IND_16995View.cpp
