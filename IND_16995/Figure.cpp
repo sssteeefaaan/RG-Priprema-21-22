@@ -47,8 +47,8 @@ PolyPoints Figure::GetPolyPoints(int n, double cx, double cy, double r, double f
 
 	for (int i = 0; i < n; i++)
 	{
-		ret.points[i].x = cx + r * cos(i * dw + fi);
-		ret.points[i].y = cy + r * sin(i * dw + fi);
+		ret.points[i].x = int(cx + r * cos(i * dw + fi) + 0.5);
+		ret.points[i].y = int(cy + r * sin(i * dw + fi) + 0.5);
 	}
 	ret.points[n] = ret.points[0];
 
@@ -66,7 +66,7 @@ PolyPoints Figure::GetMyPoints()
 void Figure::Draw(CDC* pDC)
 {
 	CBrush* oldBrush = nullptr;
-	CPen* oldPen = pDC->SelectObject(new CPen(PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 3, this->lineColor));
+	CPen* oldPen = pDC->SelectObject(new CPen(PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 5, this->lineColor));
 
 	if(this->hatchStyle != -1)
 		oldBrush = pDC->SelectObject(new CBrush(this->hatchStyle, this->fillColor));

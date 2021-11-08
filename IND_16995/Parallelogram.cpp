@@ -34,14 +34,14 @@ PolyPoints Parallelogram::GetMyPoints()
 			sqrt1 = sqrt(this->height * this->height + 4 * this->sideSize * this->sideSize),
 			sqrt2 = sqrt(this->height * this->height + this->sideSize * this->sideSize);
 
-		this->myPoints.points[0].x = this->rotationPoint.x;
-		this->myPoints.points[0].y = this->rotationPoint.y;
-		this->myPoints.points[1].x = this->rotationPoint.x + this->mirrorPoint.x * this->sideSize * cos(angle1);
-		this->myPoints.points[1].y = this->rotationPoint.y - this->mirrorPoint.y * this->sideSize * sin(angle1);
-		this->myPoints.points[2].x = this->rotationPoint.x + this->mirrorPoint.x * sqrt1 * cos(angle2);
-		this->myPoints.points[2].y = this->rotationPoint.y - this->mirrorPoint.y * sqrt1 * sin(angle2);
-		this->myPoints.points[3].x = this->rotationPoint.x + this->mirrorPoint.x * sqrt2 * cos(angle3);
-		this->myPoints.points[3].y = this->rotationPoint.y - this->mirrorPoint.y * sqrt2 * sin(angle3);
+		this->myPoints.points[0].x = int(this->rotationPoint.x + 0.5);
+		this->myPoints.points[0].y = int(this->rotationPoint.y + 0.5);
+		this->myPoints.points[1].x = int(this->rotationPoint.x + this->mirrorPoint.x * this->sideSize * cos(angle1) + 0.5);
+		this->myPoints.points[1].y = int(this->rotationPoint.y - this->mirrorPoint.y * this->sideSize * sin(angle1) + 0.5);
+		this->myPoints.points[2].x = int(this->rotationPoint.x + this->mirrorPoint.x * sqrt1 * cos(angle2) + 0.5);
+		this->myPoints.points[2].y = int(this->rotationPoint.y - this->mirrorPoint.y * sqrt1 * sin(angle2) + 0.5);
+		this->myPoints.points[3].x = int(this->rotationPoint.x + this->mirrorPoint.x * sqrt2 * cos(angle3) + 0.5);
+		this->myPoints.points[3].y = int(this->rotationPoint.y - this->mirrorPoint.y * sqrt2 * sin(angle3) + 0.5);
 		this->myPoints.points[4] = this->myPoints.points[0];
 	}
 

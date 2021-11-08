@@ -55,8 +55,8 @@ PolyPoints RightTriangle::GetMyPoints()
 
 		for (int i = 0; i < 3; i++)
 		{
-			myPoints.points[i].x = this->rotationPoint.x + r * cos(i * dw + fi);
-			myPoints.points[i].y = this->rotationPoint.y + r * sin(i * dw + fi);
+			myPoints.points[i].x = int(this->rotationPoint.x + r * cos(i * dw + fi) + 0.5);
+			myPoints.points[i].y = int(this->rotationPoint.y + r * sin(i * dw + fi) + 0.5);
 		}
 		myPoints.points[3] = myPoints.points[0];
 	}

@@ -36,7 +36,7 @@ CIND16995View::CIND16995View() noexcept
 {
 	this->windowSize.SetRect({ 0,0 }, { 500, 500 });
 	this->gridCount = 20;
-	this->gridSize = 500 / 20;
+	this->gridSize = int(500 / this->gridCount + 0.5);
 	this->backgroundColor = RGB(200, 200, 200);
 	this->penColor = RGB(0, 0, 255);
 
@@ -240,9 +240,9 @@ void CIND16995View::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	// TODO: Add your message handler code here and/or call default
 	if (nChar == VK_SPACE)
 	{
-		Invalidate();
 		this->grid = !this->grid;
-		this->OnDraw(GetDC());
+		// this->OnDraw(GetDC());
+		Invalidate();
 	}
 
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
