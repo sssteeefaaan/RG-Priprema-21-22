@@ -4,7 +4,7 @@ class Square :
     public Figure
 {
 public:
-    Square(DPOINT rotationPoint, double sideSize, double gridSize, DWORD penColor, DWORD backgroundColor, double angleOfRotation, int hatchStyle = -1, POINT mirrorPoint = { 1, 1 });
+    Square(DPOINT rotationPoint, double sideSize, double gridSize, PEN pen, BRUSH brush, double angleOfRotation = 0, POINT mirror = { 1, 1 });
     Square(Square& s);
     virtual ~Square();
 

@@ -38,15 +38,31 @@ CIND16995View::CIND16995View() noexcept
 	this->gridCount = 20;
 	this->gridSize = int(500 / this->gridCount + 0.5);
 	this->backgroundColor = RGB(200, 200, 200);
-	this->penColor = RGB(0, 0, 255);
+	
+	PEN pen = { PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 5, RGB(0, 0, 255) },
+		hexagonPen = { PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 3, RGB(0, 0, 255) };
+	BRUSH brush;
 
-	this->largeTriangle1 = new RightTriangle({ 7, 13 }, 12, gridSize, 6, penColor, RGB(180, 0, 220), 135);
-	this->largeTriangle2 = new RightTriangle({ 7, 13 }, 12, gridSize, 4, penColor, RGB(255, 255, 0), -45);
-	this->mediumTriangle = new RightTriangle({ 7, 7 }, 6 * M_SQRT2, gridSize, 8, penColor, RGB(255, 0, 0), 180);
-	this->smallTriangle1 = new RightTriangle({ 16, 4 }, 6, gridSize, 5, penColor, RGB(255, 150, 0), -135);
-	this->smallTriangle2 = new RightTriangle({ 16, 16 }, 6, gridSize, 7, penColor, RGB(0, 200, 0), 135);
-	this->square = new Square({ 16, 10 }, 6, gridSize, penColor, RGB(0, 0, 255), 45, HS_FDIAGONAL);
-	this->parallelogram = new Parallelogram({ 7, 1 }, 6, 6, gridSize, penColor, RGB(255, 185, 200));
+	brush = { -1, RGB(180, 0, 220) };
+	this->largeTriangle1 = new RightTriangle({ 7, 13 }, 12, this->gridSize, 6, pen, hexagonPen, brush, 135);
+
+	brush = { -1, RGB(255, 255, 0) };
+	this->largeTriangle2 = new RightTriangle({ 7, 13 }, 12, this->gridSize, 4, pen, hexagonPen, brush, -45);
+
+	brush = { -1, RGB(255, 0, 0) };
+	this->mediumTriangle = new RightTriangle({ 7, 7 }, 6 * M_SQRT2, this->gridSize, 8, pen, hexagonPen, brush, 180);
+
+	brush = { -1, RGB(255, 150, 0) };
+	this->smallTriangle1 = new RightTriangle({ 16, 4 }, 6, this->gridSize, 5, pen, hexagonPen, brush, -135);
+
+	brush = { -1, RGB(0, 200, 0) };
+	this->smallTriangle2 = new RightTriangle({ 16, 16 }, 6, this->gridSize, 7, pen, hexagonPen, brush, 135);
+
+	brush = { HS_FDIAGONAL, RGB(0, 0, 255), RGB(255, 255, 255) };
+	this->square = new Square({ 16, 10 }, 6, gridSize, pen, brush, 45);
+
+	brush = { -1, RGB(255, 185, 200) };
+	this->parallelogram = new Parallelogram({ 13, 4 }, 6, this->gridSize, pen, brush, 0, { -1, -1 });
 
 	this->grid = false;
 }
@@ -115,15 +131,12 @@ BOOL CIND16995View::PreCreateWindow(CREATESTRUCT& cs)
 void CIND16995View::DrawBackground(CDC* pDC)
 {
 	CPen* oldPen = (CPen*) pDC->SelectStockObject(NULL_PEN);
-	CBrush* newBrush = new CBrush(RGB(200, 200, 200)),
-		* oldBrush = pDC->SelectObject(newBrush);
+	CBrush* oldBrush = pDC->SelectObject(new CBrush(this->backgroundColor));
 
 	pDC->Rectangle(0, 0, windowSize.Width(), windowSize.Height());
 
-	pDC->SelectObject(oldBrush);
+	delete pDC->SelectObject(oldBrush);
 	pDC->SelectObject(oldPen);
-
-	delete newBrush;
 }
 
 void CIND16995View::DrawGrid(CDC* pDC)

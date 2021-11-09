@@ -47,21 +47,12 @@ public:
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	void DrawGrid(CDC*);
 	void DrawBackground(CDC* pDC);
-	void DrawRegularPolygon(CDC* pDC, int cx, int cy, int r, int n, int rot);
-	void DrawTriangleWithInscribedPolygon(CDC* pDC, struct triangle t);
-	void DrawSquare(CDC* pDC, struct square s);
-	void DrawParallelogram(CDC* pDC, struct parallelogram p);
-
-	POINT* GetRegularPoligonPoints(int cx, int cy, int r, int n, int rot);
-	POINT* GetParalelogramPoints(DPOINT vertex, int a, int h, int rot, bool mirrorX);
-	double GetDistance(POINT a, POINT b);
 
 private:
 	bool grid;
 	int gridSize;
 	int gridCount;
 	COLORREF backgroundColor;
-	COLORREF penColor;
 	CRect windowSize;
 	CPen* drawingPen;
 

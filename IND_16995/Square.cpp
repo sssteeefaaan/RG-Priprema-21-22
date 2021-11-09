@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "Square.h"
 
-Square::Square(DPOINT rotationPoint, double sideSize, double gridSize, DWORD penColor, DWORD backgroundColor, double angleOfRotation, int hatchStyle, POINT mirrorPoint)
-	:Figure(4, rotationPoint, sideSize, gridSize, penColor, backgroundColor, angleOfRotation, hatchStyle, mirrorPoint)
+Square::Square(DPOINT rotationPoint, double sideSize, double gridSize, PEN pen, BRUSH brush, double angleOfRotation, POINT mirror)
+	:Figure(4, rotationPoint, sideSize, gridSize, pen, brush, angleOfRotation, mirror)
 {}
 
 Square::Square(Square& s)
-	:Figure(4, s.rotationPoint, s.sideSize, 1, s.lineColor, s.fillColor, s.angleOfRotation, s.hatchStyle, s.mirrorPoint)
+	:Figure(4, s.rotationPoint, s.sideSize, 1, s.pen, s.brush, s.angleOfRotation, s.mirror)
 {}
 
 Square::~Square()

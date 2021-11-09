@@ -1,16 +1,16 @@
 #include "pch.h"
 #include "RightTriangle.h"
 
-RightTriangle::RightTriangle(DPOINT rotationPoint, double sideSize, double gridSize, int inscribedPolygonPointNumber, DWORD lineColor, DWORD fillColor, double angleOfRotation, int hatchStyle, POINT mirrorPoint)
-	:Figure(3, rotationPoint, sideSize, gridSize, lineColor, fillColor, angleOfRotation, hatchStyle, mirrorPoint)
+RightTriangle::RightTriangle(DPOINT rotationPoint, double sideSize, double gridSize, int inscribedPolygonPointNumber, PEN penTriangle, PEN penHexagon, BRUSH brush, double angleOfRotation, POINT mirror)
+	:Figure(3, rotationPoint, sideSize, gridSize, penTriangle, brush, angleOfRotation, mirror)
 {
-	this->SetAttributes(inscribedPolygonPointNumber);
+	this->SetAttributes(inscribedPolygonPointNumber, penHexagon);
 }
 
 RightTriangle::RightTriangle(RightTriangle& rt)
-	:Figure(3, rt.rotationPoint, rt.sideSize, 1, rt.lineColor, rt.fillColor, rt.angleOfRotation, rt.hatchStyle, rt.mirrorPoint)
+	:Figure(3, rt.rotationPoint, rt.sideSize, 1, rt.pen, rt.brush, rt.angleOfRotation, rt.mirror)
 {
-	this->SetAttributes(rt.inscribedPolygon.n);
+	this->SetAttributes(rt.inscribedPolygon.n, penHexagon);
 }
 
 RightTriangle::~RightTriangle()
@@ -20,45 +20,62 @@ RightTriangle::~RightTriangle()
 	this->inscribedPolygon.points = nullptr;
 }
 
-void RightTriangle::SetAttributes(int inscribedPolygonPointNumber)
+void RightTriangle::SetAttributes(int inscribedPolygonPointNumber, PEN penHexagon)
 {
-	this->inscribedPolygon = { nullptr, inscribedPolygonPointNumber };
+	this->penHexagon = penHexagon;
 
 	if (this->myPoints.points != nullptr)
+	{
 		delete[] this->myPoints.points;
+		this->myPoints.points = nullptr;
+	}
 
-	this->myPoints = this->GetMyPoints();
+	this->GetMyPoints();
 
 	int a = Figure::GetDistance(this->myPoints.points[0], this->myPoints.points[1]),
 		b = Figure::GetDistance(this->myPoints.points[1], this->myPoints.points[2]),
 		c = Figure::GetDistance(this->myPoints.points[2], this->myPoints.points[0]),
 		sum = a + b + c;
 
-	POINT incenter = 
+	DPOINT incenter = 
 	{ 
 		(a * this->myPoints.points[2].x + b * this->myPoints.points[0].x + c * this->myPoints.points[1].x) / sum,
 		(a * this->myPoints.points[2].y + b * this->myPoints.points[0].y + c * this->myPoints.points[1].y) / sum
 	};
 	double length = max(a, b, c) / 6;
 
-	this->inscribedPolygon = Figure::GetPolyPoints(this->inscribedPolygon.n, incenter.x, incenter.y, length);
+	PolyPoints temp = Figure::GetPolyPoints(inscribedPolygonPointNumber, incenter, length);
+
+	if (temp.points != nullptr)
+	{
+		this->inscribedPolygon = { new POINT[temp.n + 1], inscribedPolygonPointNumber };
+		for (int i = 0; i < temp.n; i++)
+			this->inscribedPolygon.points[i] = temp.points[i];
+		this->inscribedPolygon.points[temp.n] = this->inscribedPolygon.points[0];
+
+		delete[] temp.points;
+	}
+	else
+		this->inscribedPolygon = { nullptr, 0 };
 }
 
 PolyPoints RightTriangle::GetMyPoints()
 {
 	if (this->myPoints.points == nullptr)
 	{
-		myPoints = { new POINT[4], 3 };
-		double dw = M_PI_2,
-			fi = this->angleOfRotation * M_PI / 180,
-			r = this->sideSize * M_SQRT2 / 2;
+		double r = this->sideSize * M_SQRT2 / 2;
 
-		for (int i = 0; i < 3; i++)
+		PolyPoints temp = this->GetPolyPoints(4, this->rotationPoint, r, this->angleOfRotation, this->mirror);
+
+		if (temp.points != nullptr)
 		{
-			myPoints.points[i].x = int(this->rotationPoint.x + r * cos(i * dw + fi) + 0.5);
-			myPoints.points[i].y = int(this->rotationPoint.y + r * sin(i * dw + fi) + 0.5);
+			this->myPoints = { new POINT[3], 3 };
+			for (int i = 0; i < 3; i++)
+				this->myPoints.points[i] = temp.points[i];
+
+			delete[] temp.points;
+			temp.points = nullptr;
 		}
-		myPoints.points[3] = myPoints.points[0];
 	}
 
 	return myPoints;
@@ -67,10 +84,7 @@ void RightTriangle::Draw(CDC* pDC)
 {
 	Figure::Draw(pDC);
 
-	CPen* oldPen = pDC->SelectObject(new CPen(PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 3, this->lineColor));
-
-	if (this->inscribedPolygon.points == nullptr)
-		this->SetAttributes(this->inscribedPolygon.n);
+	CPen* oldPen = pDC->SelectObject(new CPen(this->penHexagon.style, this->penHexagon.width, this->penHexagon.color));
 
 	pDC->Polyline(this->inscribedPolygon.points, this->inscribedPolygon.n + 1);
 
