@@ -1,4 +1,4 @@
-
+﻿
 // IND_16995View.cpp : implementation of the CIND16995View class
 //
 
@@ -34,37 +34,45 @@ END_MESSAGE_MAP()
 
 CIND16995View::CIND16995View() noexcept
 {
-	this->windowSize.SetRect({ 0,0 }, { 500, 500 });
+	this->windowSize.SetRect({ 0,0 }, { 1000, 1000 });
 	this->gridCount = 20;
-	this->gridSize = int(500 / this->gridCount + 0.5);
+	this->gridSize = int(1000 / this->gridCount + 0.5);
 	this->backgroundColor = RGB(200, 200, 200);
 	
 	PEN pen = { PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 5, RGB(0, 0, 255) },
 		hexagonPen = { PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 3, RGB(0, 0, 255) };
 	BRUSH brush;
 
+	// Veliki ljubičasti trougao
 	brush = { -1, RGB(180, 0, 220) };
 	this->largeTriangle1 = new RightTriangle({ 7, 13 }, 12, this->gridSize, 6, pen, hexagonPen, brush, 135);
 
+	// Veliki žuti trougao
 	brush = { -1, RGB(255, 255, 0) };
 	this->largeTriangle2 = new RightTriangle({ 7, 13 }, 12, this->gridSize, 4, pen, hexagonPen, brush, -45);
 
+	// Srednji crveni trougao
 	brush = { -1, RGB(255, 0, 0) };
 	this->mediumTriangle = new RightTriangle({ 7, 7 }, 6 * M_SQRT2, this->gridSize, 8, pen, hexagonPen, brush, 180);
 
+	// Mali narandžasti trougao
 	brush = { -1, RGB(255, 150, 0) };
 	this->smallTriangle1 = new RightTriangle({ 16, 4 }, 6, this->gridSize, 5, pen, hexagonPen, brush, -135);
 
+	// Mali zeleni trougao
 	brush = { -1, RGB(0, 200, 0) };
 	this->smallTriangle2 = new RightTriangle({ 16, 16 }, 6, this->gridSize, 7, pen, hexagonPen, brush, 135);
 
+	// Šrafirani kvadrat (Dijagonalna šrafura plave boje sa belom pozadinom)
 	brush = { HS_FDIAGONAL, RGB(0, 0, 255), RGB(255, 255, 255) };
 	this->square = new Square({ 16, 10 }, 6, gridSize, pen, brush, 45);
 
+	// Roze paralelogram
 	brush = { -1, RGB(255, 185, 200) };
-	this->parallelogram = new Parallelogram({ 13, 4 }, 6, this->gridSize, pen, brush, 0, { -1, -1 });
+	this->parallelogram = new Parallelogram({ 13, 4 }, 6, this->gridSize, pen, brush);
 
 	this->grid = false;
+	this->selected = nullptr;
 }
 
 CIND16995View::~CIND16995View()
@@ -143,8 +151,7 @@ void CIND16995View::DrawGrid(CDC* pDC)
 {
 	if (this->grid)
 	{
-		CPen* newPen = new CPen(PS_SOLID, 1, RGB(255, 255, 255)),
-			*oldPen = pDC->SelectObject(newPen);
+		CPen* oldPen = pDC->SelectObject(new CPen(PS_SOLID, 1, RGB(255, 255, 255)));
 
 		POINT* points = new POINT[(this->gridCount + 1) << 2];
 		DWORD* lengths = new DWORD[(this->gridCount + 1) << 1];
@@ -174,31 +181,35 @@ void CIND16995View::DrawGrid(CDC* pDC)
 		delete[] lengths;
 		delete[] points;
 
-		pDC->SelectObject(oldPen);
-		delete newPen;
+		delete pDC->SelectObject(oldPen);
 	}
 }
 
 void CIND16995View::OnDraw(CDC* pDC)
 {
-	CIND16995Doc* pDoc = GetDocument();
-	ASSERT_VALID(pDoc);
-	if (!pDoc)
-		return;
-
 	CRect rect;
 	GetClientRect(&rect);
 	CPoint viewportOrg = pDC->SetViewportOrg((rect.Width() - this->windowSize.Width()) / 2, (rect.Height() - this->windowSize.Height()) / 2);
 
 	this->DrawBackground(pDC);
 
-	this->largeTriangle1->Draw(pDC);
-	this->largeTriangle2->Draw(pDC);
-	this->mediumTriangle->Draw(pDC);
-	this->smallTriangle1->Draw(pDC);
-	this->smallTriangle2->Draw(pDC);
-	this->square->Draw(pDC);
-	this->parallelogram->Draw(pDC);
+	if(this->selected != this->largeTriangle1)
+		this->largeTriangle1->Draw(pDC);
+	if (this->selected != this->largeTriangle2)
+		this->largeTriangle2->Draw(pDC);
+	if (this->selected != this->mediumTriangle)
+		this->mediumTriangle->Draw(pDC);
+	if (this->selected != this->smallTriangle1)
+		this->smallTriangle1->Draw(pDC);
+	if (this->selected != this->smallTriangle2)
+		this->smallTriangle2->Draw(pDC);
+	if (this->selected != this->square)
+		this->square->Draw(pDC);
+	if (this->selected != this->parallelogram)
+		this->parallelogram->Draw(pDC);
+
+	if (this->selected != nullptr)
+		this->selected->Draw(pDC);
 
 	this->DrawGrid(pDC);
 
@@ -250,13 +261,79 @@ CIND16995Doc* CIND16995View::GetDocument() const // non-debug version is inline
 
 void CIND16995View::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	// TODO: Add your message handler code here and/or call default
 	if (nChar == VK_SPACE)
 	{
 		this->grid = !this->grid;
-		// this->OnDraw(GetDC());
-		Invalidate();
 	}
 
+	if (this->selected != nullptr)
+	{
+		switch (nChar)
+		{
+		case('W'):
+			this->selected->Move({ 0, (double)this->gridSize / 2 * (-1) });
+			break;
+		case('A'):
+			this->selected->Move({ (double)this->gridSize / 2 * (-1), 0 });
+			break;
+		case('D'):
+			this->selected->Move({ (double)this->gridSize / 2, 0 });
+			break;
+		case('S'):
+			this->selected->Move({ 0, (double)this->gridSize / 2 });
+			break;
+		case('Q'):
+			this->selected->Rotate(5);
+			break;
+		case('E'):
+			this->selected->Rotate(-5);
+			break;
+		case('X'):
+			this->selected->Mirror({ -1, 1 });
+			break;
+		case('Y'):
+			this->selected->Mirror({ 1, -1 });
+			break;
+		case('0'):
+			this->selected->Select({ PS_SOLID | PS_JOIN_ROUND | PS_ENDCAP_ROUND, 5, RGB(0, 0, 255) });
+			this->selected = nullptr;
+			break;
+		default:
+			break;
+		}
+	}
+	else {
+		switch (nChar)
+		{
+		case('1'):
+			this->selected = this->largeTriangle1;
+			break;
+		case('2'):
+			this->selected = this->largeTriangle2;
+			break;
+		case('3'):
+			this->selected = this->mediumTriangle;
+			break;
+		case('4'):
+			this->selected = this->smallTriangle1;
+			break;
+		case('5'):
+			this->selected = this->smallTriangle2;
+			break;
+		case('6'):
+			this->selected = this->square;
+			break;
+		case('7'):
+			this->selected = this->parallelogram;
+			break;
+		default:
+			break;
+		}
+
+		if (this->selected != nullptr)
+			this->selected->Select({ PS_SOLID, 5, RGB(255, 0 ,0) });
+	}
+
+	Invalidate();
 	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }

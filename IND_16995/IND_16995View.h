@@ -63,6 +63,7 @@ private:
 	Figure* smallTriangle2;
 	Figure* square;
 	Figure* parallelogram;
+	Figure* selected;
 };
 
 #ifndef _DEBUG  // debug version in IND_16995View.cpp

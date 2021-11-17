@@ -31,32 +31,37 @@ void RightTriangle::SetAttributes(int inscribedPolygonPointNumber, PEN penHexago
 	}
 
 	this->GetMyPoints();
+	this->inscribedPolygon = this->CalculateInscribedPolygon(inscribedPolygonPointNumber);
+}
 
+PolyPoints RightTriangle::CalculateInscribedPolygon(int inscribedPolygonPointNumber)
+{
 	int a = Figure::GetDistance(this->myPoints.points[0], this->myPoints.points[1]),
 		b = Figure::GetDistance(this->myPoints.points[1], this->myPoints.points[2]),
 		c = Figure::GetDistance(this->myPoints.points[2], this->myPoints.points[0]),
 		sum = a + b + c;
 
-	DPOINT incenter = 
-	{ 
+	DPOINT incenter =
+	{
 		(a * this->myPoints.points[2].x + b * this->myPoints.points[0].x + c * this->myPoints.points[1].x) / sum,
 		(a * this->myPoints.points[2].y + b * this->myPoints.points[0].y + c * this->myPoints.points[1].y) / sum
 	};
 	double length = max(a, b, c) / 6;
 
-	PolyPoints temp = Figure::GetPolyPoints(inscribedPolygonPointNumber, incenter, length);
+	PolyPoints temp = Figure::GetPolyPoints(inscribedPolygonPointNumber, incenter, length),
+		ret = { nullptr, inscribedPolygonPointNumber };
 
 	if (temp.points != nullptr)
 	{
-		this->inscribedPolygon = { new POINT[temp.n + 1], inscribedPolygonPointNumber };
+		ret.points = new POINT[temp.n + 1];
 		for (int i = 0; i < temp.n; i++)
-			this->inscribedPolygon.points[i] = temp.points[i];
-		this->inscribedPolygon.points[temp.n] = this->inscribedPolygon.points[0];
+			ret.points[i] = temp.points[i];
+		ret.points[temp.n] = ret.points[0];
 
 		delete[] temp.points;
 	}
-	else
-		this->inscribedPolygon = { nullptr, 0 };
+
+	return ret;
 }
 
 PolyPoints RightTriangle::GetMyPoints()
@@ -89,4 +94,10 @@ void RightTriangle::Draw(CDC* pDC)
 	pDC->Polyline(this->inscribedPolygon.points, this->inscribedPolygon.n + 1);
 
 	delete pDC->SelectObject(oldPen);
+}
+
+void RightTriangle::Change()
+{
+	Figure::Change();
+	this->inscribedPolygon = this->CalculateInscribedPolygon(this->inscribedPolygon.n);
 }

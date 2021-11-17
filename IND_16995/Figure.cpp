@@ -88,3 +88,38 @@ void Figure::Draw(CDC* pDC)
 }
 
 double Figure::GetDistance(POINT a, POINT b) { return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2)); }
+
+void Figure::Move(DPOINT diff)
+{
+	this->rotationPoint.x += diff.x;
+	this->rotationPoint.y += diff.y;
+
+	this->Change();
+}
+void Figure::Rotate(double fi)
+{
+	this->angleOfRotation += fi;
+
+	this->Change();
+}
+void Figure::Mirror(POINT mirror)
+{
+	this->mirror.x *= mirror.x;
+	this->mirror.y *= mirror.y;
+
+	this->Change();
+}
+void Figure::Change()
+{
+	if (this->myPoints.points != nullptr)
+	{
+		delete[] this->myPoints.points;
+		this->myPoints.points = nullptr;
+	}
+
+	this->GetMyPoints();
+}
+void Figure::Select(PEN pen)
+{
+	this->pen = pen;
+}

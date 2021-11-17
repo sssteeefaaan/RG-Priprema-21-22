@@ -61,5 +61,11 @@ public:
 
 	static PolyPoints GetPolyPoints(int n, DPOINT center, double r, double fi = 0, POINT mirror = { 1, 1 });
 	static double GetDistance(POINT a, POINT b);
+
+	virtual void Select(PEN p);
+	virtual void Move(DPOINT diff);
+	virtual void Rotate(double fi);
+	virtual void Mirror(POINT mirror);
+	virtual void Change();
 };
 
