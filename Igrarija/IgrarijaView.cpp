@@ -52,6 +52,30 @@ BOOL CIgrarijaView::PreCreateWindow(CREATESTRUCT& cs)
 // CIgrarijaView drawing
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+void Rotate(CDC* pDC, double angle, bool isRight = false)
+{
+	XFORM mat;
+	mat.eM11 =
+		mat.eM22 = cos(angle);
+	mat.eM12 = sin(angle);
+	mat.eM21 = -mat.eM12;
+	mat.eDx = mat.eDy = 0;
+
+	pDC->ModifyWorldTransform(&mat, isRight ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
+}
+void Translate(CDC* pDC, double Dx, double Dy, bool isRight = false)
+{
+	XFORM mat = { 1, 0, 0, 1, Dx, Dy };
+
+	pDC->ModifyWorldTransform(&mat, isRight ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
+}
+void Scale(CDC* pDC, double sX, double sY, bool isRight = false)
+{
+	XFORM mat = { sX, 0, 0, sY, 0, 0 };
+
+	pDC->ModifyWorldTransform(&mat, isRight ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
+}
 void CIgrarijaView::OnDraw(CDC* pDC)
 {
 	/*CPen* oldPen = pDC->SelectObject(new CPen(PS_SOLID, 3, RGB(255, 0, 0)));
@@ -97,7 +121,7 @@ void CIgrarijaView::OnDraw(CDC* pDC)
 	delete pDC->SelectObject(oldBrush);
 	pDC->SelectClipRgn(&clientRgn);*/
 
-	CMetaFileDC metaDC;
+	/*CMetaFileDC metaDC;
 	metaDC.CreateEnhanced(pDC, _T("Probicica2.emf"), CRect(0, 0, 15000, 15000), _T("Proba"));
 
 	HENHMETAFILE MF;
@@ -124,7 +148,29 @@ void CIgrarijaView::OnDraw(CDC* pDC)
 	delete metaDC.SelectObject(oldPen);
 
 	MF = metaDC.CloseEnhanced();
-	metaDC.DeleteDC();
+	metaDC.DeleteDC();*/
+	int oldGM = pDC->SetGraphicsMode(GM_ADVANCED);
+	XFORM oldWT;
+	pDC->GetWorldTransform(&oldWT);
+	pDC->ModifyWorldTransform(nullptr, MWT_IDENTITY);
+
+	pDC->Rectangle(200, 100, 300, 200);
+
+	Rotate(pDC, M_PI / 4);
+
+	CFont f;
+	f.CreateFontW(20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, L"Times New Roman");
+	pDC->SelectObject(&f);
+
+	pDC->TextOut(100, 100, L"Stefan");
+
+	pDC->Rectangle(200, 100, 300, 200);
+
+	pDC->SetWorldTransform(&oldWT);
+	pDC->SetGraphicsMode(oldGM);
+
+
+	//pDC->SetViewportOrg(oldViewport);
 }
 
 
