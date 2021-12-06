@@ -17,7 +17,7 @@ CGLRender::CGLRender()
 		this->viewR * cos(M_PI * viewAngleXY / 180) * sin(M_PI * viewAngleXZ / 180)
 	};
 	this->upVector = new GLdouble[3]{ 0, 1, 0 };
-	this->lookingAt = new GLdouble[3]{ 0, 2.5, 0 };
+	this->lookingAt = new GLdouble[3]{ 0, 7.5, 0 };
 
 	this->showGrid = this->showAxes = true;
 
@@ -302,8 +302,11 @@ void CGLRender::DrawFigure(double angle)
 		glTranslatef(0, 0.7, 0);
 		DrawCone(1, 0.25, 90);
 
-		glTranslatef(0, 0.7, 0);
-		DrawSphere(0.2, 90, 90);
+		glTranslatef(0, 0.25, 0);
+		/*DrawSphere(0.2, 90, 90);
+
+		glTranslatef(0, 0.2, 0);*/
+		DrawStar(1, 5);
 	}
 	glPopMatrix();
 
@@ -509,6 +512,22 @@ void CGLRender::DrawSphere(double r, int nSegAlpha, int nSegBeta, COLOR3F color)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	
 	free(vertexes);
+}
+
+void CGLRender::DrawStar(double h, int points, COLOR3F color)
+{
+	double dPoint = 360 / 10;
+
+	glPushMatrix();
+	for (int i = 0; i < 10; i ++)
+	{
+		glRotatef(dPoint, 0, 0, 1);
+		glPushMatrix();
+		glTranslatef(0, h / 4, 0);
+		DrawCone(h / 2, h / 5, 10, color);
+		glPopMatrix();
+	}
+	glPopMatrix();
 }
 
 void CGLRender::DrawGrid(double width, double height, int nSegW, int nSegH, COLOR3F color)
