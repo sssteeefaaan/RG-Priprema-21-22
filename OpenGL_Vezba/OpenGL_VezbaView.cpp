@@ -173,6 +173,7 @@ void COpenGLVezbaView::OnSize(UINT nType, int cx, int cy)
 void COpenGLVezbaView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	// TODO: Add your message handler code here and/or call default
+	double dW = (GetKeyState(VK_SHIFT) & 0x8000) ? -5 : 5;
 	switch (nChar)
 	{
 	case('P'):
@@ -192,6 +193,24 @@ void COpenGLVezbaView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		break;
 	case('S'):
 		this->m_glRenderer->RotateView(-5, 0);
+		break;
+	case('B'):
+		this->m_glRenderer->RotateBody(dW);
+		break;
+	case('H'):
+		this->m_glRenderer->RotateHead(dW);
+		break;
+	case('J'):
+		this->m_glRenderer->RotateLeftArm(dW);
+		break;
+	case('N'):
+		this->m_glRenderer->RotateLeftElbow(dW);
+		break;
+	case('K'):
+		this->m_glRenderer->RotateRightArm(dW);
+		break;
+	case('M'):
+		this->m_glRenderer->RotateRightElbow(dW);
 		break;
 	default:
 		break;

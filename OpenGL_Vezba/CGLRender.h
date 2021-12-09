@@ -16,6 +16,15 @@ struct COLOR4F {
 	float A;
 };
 
+struct ROBOTROT {
+	float body;
+	float head;
+	float leftArm;
+	float leftElbow;
+	float rightArm;
+	float rightElbow;
+};
+
 class CGLRender
 {
 private:
@@ -32,6 +41,8 @@ private:
 	bool showGrid;
 	bool showAxes;
 
+	ROBOTROT robotParams;
+
 public:
 	CGLRender();
 	~CGLRender();
@@ -42,7 +53,7 @@ public:
 	void Reshape(CDC* pDC, int w, int h);
 	void DrawScene(CDC* pDC);
 
-	void DrawCube(double dSize = 1, COLOR4F figureColor = { 1, 1, 1, 0 }, COLOR4F outlineColor = { 0, 0, 0, 0 }, double outlineWidth = 2);
+	void DrawCube(double dSize = 1, COLOR4F figureColor = { 0.4, 0, 0.75, 0 }, COLOR4F outlineColor = { 0, 0.5, 0, 0 }, double outlineWidth = 5);
 	void DrawRobot(double bodyRot = 0, double headRot = 0, double leftArmRot = 0, double rightArmRot = 0, double leftElbowRot = 0, double rightElbowRot = 0);
 
 	void DrawAxes(double lenght = 10, double lineWidth = 2, COLOR4F xColor = { 1, 0, 0, 0 }, COLOR4F yColor = { 0, 1, 0, 0 }, COLOR4F zColor = { 0, 0, 1, 0 });
@@ -54,5 +65,12 @@ public:
 
 	inline void ToggleGrid() { this->showGrid = !this->showGrid; }
 	inline void ToggleAxes() { this->showAxes = !this->showAxes; }
+
+	inline void RotateBody(double dw) { this->robotParams.body += dw; }
+	inline void RotateHead(double dw) { this->robotParams.head += dw; }
+	inline void RotateLeftArm(double dw) { this->robotParams.leftArm += dw; }
+	inline void RotateLeftElbow(double dw) { this->robotParams.leftElbow += dw; }
+	inline void RotateRightArm(double dw) { this->robotParams.rightArm += dw; }
+	inline void RotateRightElbow(double dw) { this->robotParams.rightElbow += dw; }
 };
 

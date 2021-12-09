@@ -20,6 +20,8 @@ CGLRender::CGLRender()
 	this->lookingAt = new GLdouble[3]{ 0, 0, 0 };
 
 	this->showGrid = this->showAxes = true;
+
+	this->robotParams = { 0,0,0,0,0,0 };
 }
 
 CGLRender::~CGLRender()
@@ -126,7 +128,7 @@ void CGLRender::DrawScene(CDC* pDC)
 {
 	wglMakeCurrent(pDC->m_hDC, this->m_hrc);
 	// -------------------------------------------
-	glClearColor(1, 1, 1, 0);
+	glClearColor(.75, .75, 0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
@@ -137,9 +139,16 @@ void CGLRender::DrawScene(CDC* pDC)
 		this->lookingAt[0], this->lookingAt[1], this->lookingAt[2],
 		this->upVector[0], this->upVector[1], this->upVector[2]);
 
-	DrawAxes();
+	if(this->showAxes)
+		DrawAxes();
 
-	DrawRobot();
+	DrawRobot(this->robotParams.body, this->robotParams.head, this->robotParams.leftArm, this->robotParams.rightArm, this->robotParams.leftElbow, this->robotParams.rightElbow);
+
+	if (this->showGrid)
+	{
+		glTranslatef(0, -3, 0);
+		DrawGrid(5, 20, { 0.5,0,0.2 }, 2);
+	}
 
 	glFlush();
 
@@ -230,26 +239,100 @@ void CGLRender::DrawCube(double dSize, COLOR4F figureColor, COLOR4F outlineColor
 void CGLRender::DrawRobot(double bodyRot, double headRot, double leftArmRot, double rightArmRot, double leftElbowRot, double rightElbowRot)
 {
 	glPushMatrix();
-		glScalef(1, 2, .5);
-		DrawCube(1, { 1, 1, 1, 1 });
-	glPopMatrix();
-	
-	glPushMatrix();
-		glScalef(0.6, 0.6, 0.6);
-		glTranslatef(0, (1.5)/.6, 0);
-		DrawCube(1, { 1, 1, 1, 0 });
-	glPopMatrix();
+	{
+		glRotatef(bodyRot, 0, 1, 0);
 
-	glPushMatrix();
-		glScalef(0.3, 1, 0.5);
-		glTranslatef(-1, 1, 0);
-		DrawCube(1, { 1,1,1,1 });
-	glPopMatrix();
+		// Body
+		glPushMatrix();
+		{
+			glScalef(1, 2, .5);
+			DrawCube();
+		}
+		glPopMatrix();
 
-	glPushMatrix();
-	glScalef(0.3, 1, 0.5);
-	glTranslatef(1, 1, 0);
-	DrawCube(1, { 1,1,1,1 });
+		// Head
+		glPushMatrix();
+		{
+			glRotatef(headRot, 0, 1, 0);
+
+			glTranslatef(0, 1.3, 0);
+			glScalef(.6, .6, .6);
+			DrawCube();
+		}
+		glPopMatrix();
+
+		// Left arm
+		glPushMatrix();
+		{
+			glTranslatef(-.65, 1, 0);
+			glRotatef(-leftArmRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			glScalef(0.3, 1, 0.5);
+			DrawCube();
+
+			glTranslatef(0, -.5, 0);
+			glRotatef(-leftElbowRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			DrawCube();
+		}
+		glPopMatrix();
+
+		// Right arm
+		glPushMatrix();
+		{
+			glTranslatef(.65, 1, 0);
+			glRotatef(rightArmRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			glScalef(0.3, 1, 0.5);
+			DrawCube();
+
+			glTranslatef(0, -.5, 0);
+			glRotatef(rightElbowRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			DrawCube();
+		}
+		glPopMatrix();
+
+		// Left leg
+		glPushMatrix();
+		{
+			glTranslatef(-.35, -1, 0);
+			glRotatef(-leftArmRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			glScalef(0.3, 1, 0.5);
+			DrawCube();
+
+			glTranslatef(0, -.5, 0);
+			glRotatef(-leftElbowRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			DrawCube();
+		}
+		glPopMatrix();
+
+		// Right leg
+		glPushMatrix();
+		{
+			glTranslatef(.35, -1, 0);
+			glRotatef(rightArmRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			glScalef(0.3, 1, 0.5);
+			DrawCube();
+
+			glTranslatef(0, -.5, 0);
+			glRotatef(rightElbowRot, 1, 0, 0);
+
+			glTranslatef(0, -.5, 0);
+			DrawCube();
+		}
+		glPopMatrix();
+	}
 	glPopMatrix();
 }
 
