@@ -1,4 +1,4 @@
-
+﻿
 // April2021View.cpp : implementation of the CApril2021View class
 //
 
@@ -71,13 +71,13 @@ void CApril2021View::OnDraw(CDC* pDC)
 {
 	int oldGM = pDC->SetGraphicsMode(GM_ADVANCED);
 
-	CRect aRect[3] = { CRect(0, 0, 50, 50), CRect(0, 0, 75, 75), CRect(0, 0, 60, 60) };
-	int anArcs[3] = { 5, 7, 6 };
-	COLORREF aClrFill[3] = { RGB(200, 0, 0), RGB(200, 200, 0), RGB(200, 0, 200) },
-		aClrLine[3] = { RGB(100, 0, 0), RGB(100, 100, 0), RGB(100, 0, 100) };
+	CRect aRect[3] = { CRect(0, 0, 60, 60), CRect(0, 0, 80, 80), CRect(0, 0, 70, 70) };
+	int anArcs[3] = { 1, 2, 3 };
+	COLORREF aClrFill[3] = { RGB(200, 0, 0), RGB(200, 100, 0), RGB(200, 0, 200) },
+		aClrLine[3] = { RGB(100, 0, 0), RGB(100, 50, 0), RGB(100, 0, 100) };
 	float aRot[3] = { 3.14 / 4, 3.14 / 6, 3.14 / 8 };
-	CString aStr[3] = { CString("Ruzica"), CString("LaLaLa"), CString("Ljubicica") };
-	CPoint aPts[3] = { { 200, 100 }, { 400, 400 }, { 900, 300 } };
+	CString aStr[3] = { L"Ružičica", L"Laličica", L"Ljubičica" };
+	CPoint aPts[3] = { { 300, 100 }, { 500, 400 }, { 1000, 300 } };
 
 	DrawFlowers(pDC, aRect, anArcs, aClrFill, aClrLine, aRot, aStr, aPts, 3);
 
@@ -134,7 +134,7 @@ void CApril2021View::DrawFlower(CDC* pDC, CRect rect, int nArcs, COLORREF clrFil
 
 	CBrush* oldBrush = pDC->SelectObject(new CBrush(RGB(200, 200, 0)));
 
-	int R = sqrt(pow(rect.Width(), 2) + pow(rect.Height(), 2)) / (2.0 * nArcs) + .5;
+	int R = (double) rect.Height() / 4 + .5;
 	//int R = rect.Width() / (2.0 * nArcs) + .5;
 	pDC->Ellipse(-R, -R, R, R);
 
@@ -153,16 +153,19 @@ void CApril2021View::DrawFlower(CDC* pDC, CRect rect, int nArcs, COLORREF clrFil
 	LOGFONT font{};
 	CSize textSize = pDC->GetTextExtent(str);
 	pDC->GetCurrentFont()->GetLogFont(&font);
-	font.lfHeight = (double)textSize.cy / textSize.cx * arcLength + .5;	
+	font.lfHeight = (double)textSize.cy / textSize.cx * arcLength + .5;
+	font.lfWidth = arcLength / str.GetLength() + 0.5;
+	font.lfPitchAndFamily = FIXED_PITCH | FF_ROMAN;
+	wcscpy_s(font.lfFaceName, CString("Times New Roman"));
 
 	for (int i = 0; i < str.GetLength(); i++)
 	{
 		double x = r * cos(angle),
 			y = r * sin(angle);
-		font.lfEscapement = (-90.5 + (angle * 180 / 3.14)) * 10;
+		font.lfOrientation = (90.5 - (angle * 180 / 3.14)) * 10;
 
 		CFont newFont;
-		newFont.CreateFontIndirectW(&font);
+		newFont.CreateFontIndirect(&font);
 		CFont *oldFont = pDC->SelectObject(&newFont);
 
 		pDC->TextOutW(x + .5, y + .5, CString(str.GetAt(i)));
