@@ -55,7 +55,7 @@ void CJanuar2022View::OnDraw(CDC* pDC)
 {
 	int oldGM = pDC->SetGraphicsMode(GM_ADVANCED);
 
-	DrawMagnifiedBitmap(pDC, 2, CString("Januar_2022.dib"));
+	DrawMagnifiedBitmap(pDC, 25, CString("Januar_2022_25.png"));
 
 	pDC->SetGraphicsMode(oldGM);
 }
@@ -181,7 +181,7 @@ void CJanuar2022View::DrawMagnifiedBitmap(CDC* pDC, int mag, const CString& name
 	memDC->SetViewportOrg(0, 0);
 
 	memDC->Rectangle(window);
-	DrawPuzzle(memDC, 25, 3.14 / 4, window.Width() / (mag * 2.0) + .5, window.Height() / (mag * 2.0) + .5);
+	DrawPuzzle(memDC, 1, 3.14 / 4, window.Width() / (mag * 2.0) + .5, window.Height() / (mag * 2.0) + .5);
 
 	DImage img(*newBitmap);
 	img.Save(name);
