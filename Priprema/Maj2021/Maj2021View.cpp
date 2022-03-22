@@ -54,8 +54,10 @@ BOOL CMaj2021View::PreCreateWindow(CREATESTRUCT& cs)
 void CMaj2021View::OnDraw(CDC* pDC)
 {
 	int oldGM = pDC->SetGraphicsMode(GM_ADVANCED);
-	//DrawCylinder(pDC, 400, 400, 50, 30, 150, 20);
-	DrawFigure(pDC, 600, 350, 50, 25, 100, 20, 50);
+	
+	CRect window;
+	GetClientRect(&window);
+	DrawFigure(pDC, window.Width() / 2.0, window.Height() / 2.0, 50, 25, 100, 20, 50);
 
 	pDC->SetGraphicsMode(oldGM);
 }
@@ -105,7 +107,7 @@ void CMaj2021View::DrawConeBottom(CDC* pDC, float cX, float cY, float a, float b
 	pDC->SelectObject(&brush);
 	pDC->Polygon(elipse, n);
 	pDC->SelectObject(oldBrush)->DeleteObject();
-	delete(elipse);
+	delete[] elipse;
 }
 void CMaj2021View::DrawConeTop(CDC* pDC, float cX, float cY, float a, float b, float h, int n)
 {
@@ -165,7 +167,7 @@ void CMaj2021View::DrawCylinder(CDC* pDC, float cX, float cY, float a, float b, 
 	pDC->SelectObject(&brush);
 	pDC->Polygon(elipse, n);
 	pDC->SelectObject(oldBrush)->DeleteObject();
-	delete(elipse);
+	delete[] elipse;
 }
 void CMaj2021View::DrawFigure(CDC* pDC, float cX, float cY, float a, float b, float h, int n, float r)
 {
