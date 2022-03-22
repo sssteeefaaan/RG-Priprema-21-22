@@ -56,19 +56,23 @@ void COktobar2021View::OnDraw(CDC* pDC)
 	CRect window;
 	GetClientRect(&window);
 
+	XFORM state{};
+	pDC->GetWorldTransform(&state);
 	int oldGM = pDC->SetGraphicsMode(GM_ADVANCED);
+
 	LoadIdentity(pDC);
 
 	Translate(pDC, 200, window.Height() / 2.0 + .5, false);
-	DrawTail(pDC, 20, 6, 0);
+	DrawTail(pDC, 25, 6, 0);
 
-	Translate(pDC, 300, 0, false);
-	DrawTail(pDC, 20, 6, -3.14 / 8.0);
+	Translate(pDC, 400, 0, false);
+	DrawTail(pDC, 25, 6, -3.14 / 8.0);
 
-	Translate(pDC, 300, 0, false);
-	DrawTail(pDC, 20, 6, -3.14 / 4);
+	Translate(pDC, 400, 0, false);
+	DrawTail(pDC, 25, 6, -3.14 / 4);
 
 	pDC->SetGraphicsMode(oldGM);
+	pDC->SetWorldTransform(&state);
 }
 
 void COktobar2021View::DrawTop(CDC* pDC, int size)
@@ -76,17 +80,17 @@ void COktobar2021View::DrawTop(CDC* pDC, int size)
 	int halfSize = size / 2.0 + .5,
 		quarterSize = size / 4.0 + .5;
 
-	CPoint start1(0, -halfSize), start2(0, halfSize), start3(0, size);
+	CPoint start1(halfSize, 0), start2(0, halfSize), start3(0, size);
 
 	int oldAD = pDC->SetArcDirection(AD_COUNTERCLOCKWISE);
 	pDC->BeginPath();
 	{
-		pDC->MoveTo(0, -halfSize);
+		pDC->MoveTo(start1);
 		pDC->ArcTo(CRect(-halfSize, -halfSize, halfSize, halfSize), start1, start2);
 		pDC->SetArcDirection(AD_CLOCKWISE);
 		pDC->ArcTo(CRect(-quarterSize, halfSize, quarterSize, size), start2, start3);
 		pDC->SetArcDirection(AD_COUNTERCLOCKWISE);
-		pDC->ArcTo(CRect(-halfSize, -halfSize, halfSize, size), start3, start1);
+		pDC->ArcTo(CRect(-halfSize, -size, halfSize, size), start3, start1);
 	}
 	pDC->EndPath();
 	pDC->SetArcDirection(oldAD);
