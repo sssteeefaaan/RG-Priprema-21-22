@@ -61,7 +61,11 @@ void CSeptembar2021View::OnDraw(CDC* pDC)
 	COLORREF fills[6] = { RGB(255, 0, 0), RGB(100, 200, 50), RGB(20, 20, 200), RGB(100, 150, 200), RGB(220, 220, 0), RGB(50, 50, 200) };
 	bool** arcs = new bool* [4];
 	for (int i = 0; i < 4; i++)
-		arcs[i] = new bool(i % 2);
+	{
+		arcs[i] = new bool[4];
+		for (int j = 0; j < 4; j++)
+			arcs[i][j] = ((i + j) % 2);
+	}
 
 	DrawSunbeds(pDC, 100, 6, fills, RGB(255, 200, 0), arcs, 4, CPoint(window.Width() / 3.0 + .5, 100));
 
@@ -214,7 +218,7 @@ void CSeptembar2021View::Rotate(CDC* pDC, float angle, bool rightMultiply)
 {
 	XFORM transform{};
 	transform.eM11 = transform.eM22 = cos(angle);
-	transform.eM12 = -(transform.eM21 = sin(angle));
+	transform.eM21 = -(transform.eM12 = sin(angle));
 	
 	pDC->ModifyWorldTransform(&transform, rightMultiply ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
 }

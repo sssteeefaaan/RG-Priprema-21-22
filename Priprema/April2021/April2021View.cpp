@@ -62,7 +62,7 @@ void CApril2021View::Rotate(CDC* pDC, double angle, bool rightMultiply)
 {
 	XFORM transformation{};
 	transformation.eM11 = transformation.eM22 = cos(angle);
-	transformation.eM12 = -(transformation.eM21 = sin(angle));
+	transformation.eM21 = -(transformation.eM12 = sin(angle));
 
 	pDC->ModifyWorldTransform(&transformation, rightMultiply ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
 }

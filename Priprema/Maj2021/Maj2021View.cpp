@@ -72,7 +72,7 @@ void CMaj2021View::Rotate(CDC* pDC, float angle, bool rightMultiply)
 {
 	XFORM transform{};
 	transform.eM11 = transform.eM22 = cos(angle);
-	transform.eM12 = -(transform.eM21 = sin(angle));
+	transform.eM21 = -(transform.eM12 = sin(angle));
 
 	pDC->ModifyWorldTransform(&transform, rightMultiply ? MWT_RIGHTMULTIPLY : MWT_LEFTMULTIPLY);
 }
@@ -175,7 +175,7 @@ void CMaj2021View::DrawFigure(CDC* pDC, float cX, float cY, float a, float b, fl
 	pDC->GetWorldTransform(&state);
 
 	Translate(pDC, cX, cY, false);
-	Rotate(pDC, 3.14 / 4.0, false);
+	Rotate(pDC, -3.14 / 4.0, false);
 
 	// Push
 
@@ -184,21 +184,21 @@ void CMaj2021View::DrawFigure(CDC* pDC, float cX, float cY, float a, float b, fl
 
 	Translate(pDC, 0, -r, false); // Pop
 
-	Rotate(pDC, 3.14 / 2.0, false);
+	Rotate(pDC, -3.14 / 2.0, false);
 	//Push
 	Translate(pDC, 0, r, false);
 	DrawConeBottom(pDC, 0, 0, a, b, h, n);
 
 	Translate(pDC, 0, -r, false); // Pop
 
-	Rotate(pDC, 3.14 / 2.0, false);
+	Rotate(pDC, -3.14 / 2.0, false);
 	// Push
 	Translate(pDC, 0, r, false);
 	DrawConeTop(pDC, 0, 0, a, b, h, n);
 
 	Translate(pDC, 0, -r, false); // Pop
 
-	Rotate(pDC, 3.14 / 2.0, false);
+	Rotate(pDC, -3.14 / 2.0, false);
 	Translate(pDC, 0, r, false);
 	DrawConeBottom(pDC, 0, 0, a, b, h, n);
 
