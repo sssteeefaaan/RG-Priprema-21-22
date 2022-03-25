@@ -198,10 +198,10 @@ void COpenGLView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		this->m_glRender->RotatePiece(-5);
 		break;
 	case('A'):
-		this->m_glRender->RotateView(0, -5);
+		this->m_glRender->RotateView(0, 5);
 		break;
 	case('D'):
-		this->m_glRender->RotateView(0, 5);
+		this->m_glRender->RotateView(0, -5);
 		break;
 	case('W'):
 		this->m_glRender->RotateView(5, 0);

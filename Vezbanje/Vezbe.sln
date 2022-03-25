@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_Vezba", "OpenGL_Vezb
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Brush_Hatch", "Brush_Hatch\Brush_Hatch.vcxproj", "{B24A7229-9B1D-4523-A357-E94FDC1CBB62}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL_2022", "OpenGL_2022\OpenGL_2022.vcxproj", "{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{B24A7229-9B1D-4523-A357-E94FDC1CBB62}.Release|x64.Build.0 = Release|x64
 		{B24A7229-9B1D-4523-A357-E94FDC1CBB62}.Release|x86.ActiveCfg = Release|Win32
 		{B24A7229-9B1D-4523-A357-E94FDC1CBB62}.Release|x86.Build.0 = Release|Win32
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Debug|x64.ActiveCfg = Debug|x64
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Debug|x64.Build.0 = Debug|x64
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Debug|x86.ActiveCfg = Debug|Win32
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Debug|x86.Build.0 = Debug|Win32
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Release|x64.ActiveCfg = Release|x64
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Release|x64.Build.0 = Release|x64
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Release|x86.ActiveCfg = Release|Win32
+		{E8CB87B6-D9A1-4508-9ADE-0C38637FFF10}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
