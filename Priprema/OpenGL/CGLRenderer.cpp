@@ -2,9 +2,9 @@
 #include "CGLRenderer.h"
 
 CGLRenderer::CGLRenderer()
-	:lookingAt{ 0, 0, 0 }, upVector{ 0, 1, 0 }
+	:lookingAt{ 0, 16, 0 }, upVector{ 0, 1, 0 }
 {
-	this->viewR = 50;
+	this->viewR = 100;
 
 	this->viewAngleXY = 20;
 	this->viewAngleXZ = 90;
@@ -92,16 +92,21 @@ void CGLRenderer::DrawScene(CDC* pDC)
 
 	glTranslatef(0, 8, 0);
 
-	glColor3f(1, 0, 0);
+	glColor4f(1, 1, 0, .75);
+	DrawCuboid(32, 16, 32);
+
+	glTranslatef(0, 16, 0);
+
+	glColor4f(1, 0, 0, .75);
 	DrawTorus(10, 8);
 
-	glColor3f(0, 0, 1);
+	glColor4f(0, 0, 1, .75);
 	DrawCylinder(16, 16, 0);
 
 	glTranslatef(0, 13, 0);
 	
-	glColor3f(0, 1, 0);
-	DrawCuboid(10, 10, 10);
+	glColor4f(1, 0, 1, .75);
+	DrawSphere(5);
 
 	//--------------------------------
 	glFlush();
@@ -337,7 +342,6 @@ void CGLRenderer::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	double step = 5;
 	switch (nChar)
 	{
-	
 	case('W'):
 		this->viewAngleXY += step;
 		this->CalculatePosition();
@@ -364,6 +368,13 @@ void CGLRenderer::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		break;
 	case('C'):
 		this->showAxes = !this->showAxes;
+		break;
+	case('R'):
+		this->lookingAt[1] += step;
+		this->CalculatePosition();
+		break;
+	case('T'):
+		this->lookingAt[1] -= step;
 		break;
 	default:
 		break;
