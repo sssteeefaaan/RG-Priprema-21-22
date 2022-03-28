@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Oktobar2021", "Oktobar2021\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Januar2020", "Januar2020\Januar2020.vcxproj", "{65F87F5C-75DB-44C5-A9C8-A1AEF82DAC51}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL", "OpenGL\OpenGL.vcxproj", "{9047932D-BA18-41FA-BF33-D873822E99F9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -71,6 +73,14 @@ Global
 		{65F87F5C-75DB-44C5-A9C8-A1AEF82DAC51}.Release|x64.Build.0 = Release|x64
 		{65F87F5C-75DB-44C5-A9C8-A1AEF82DAC51}.Release|x86.ActiveCfg = Release|Win32
 		{65F87F5C-75DB-44C5-A9C8-A1AEF82DAC51}.Release|x86.Build.0 = Release|Win32
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Debug|x64.ActiveCfg = Debug|x64
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Debug|x64.Build.0 = Debug|x64
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Debug|x86.ActiveCfg = Debug|Win32
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Debug|x86.Build.0 = Debug|Win32
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Release|x64.ActiveCfg = Release|x64
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Release|x64.Build.0 = Release|x64
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Release|x86.ActiveCfg = Release|Win32
+		{9047932D-BA18-41FA-BF33-D873822E99F9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

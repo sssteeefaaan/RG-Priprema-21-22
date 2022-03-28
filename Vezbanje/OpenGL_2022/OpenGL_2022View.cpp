@@ -36,8 +36,9 @@ BEGIN_MESSAGE_MAP(COpenGL2022View, CView)
 	ON_WM_SIZE()
 	ON_WM_MOUSEMOVE()
 	ON_WM_LBUTTONUP()
-	ON_WM_KEYUP()
+//	ON_WM_KEYUP()
 	ON_WM_MOUSEWHEEL()
+	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // COpenGL2022View construction/destruction
@@ -172,7 +173,15 @@ void COpenGL2022View::OnLButtonUp(UINT nFlags, CPoint point)
 }
 
 
-void COpenGL2022View::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+BOOL COpenGL2022View::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
+{
+	m_glRenderer.Zoom(zDelta < 0);
+	Invalidate();
+	return CView::OnMouseWheel(nFlags, zDelta, pt);
+}
+
+
+void COpenGL2022View::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch (nChar)
 	{
@@ -192,15 +201,6 @@ void COpenGL2022View::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 	default:
 		break;
 	}
-
 	Invalidate();
-	CView::OnKeyUp(nChar, nRepCnt, nFlags);
-}
-
-
-BOOL COpenGL2022View::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
-{
-	m_glRenderer.Zoom(zDelta < 0);
-	Invalidate();
-	return CView::OnMouseWheel(nFlags, zDelta, pt);
+	CView::OnKeyDown(nChar, nRepCnt, nFlags);
 }

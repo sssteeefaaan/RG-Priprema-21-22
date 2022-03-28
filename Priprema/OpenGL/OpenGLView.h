@@ -1,21 +1,21 @@
 
-// OpenGL_2022View.h : interface of the COpenGL2022View class
+// OpenGLView.h : interface of the COpenGLView class
 //
 
 #pragma once
 #include "CGLRenderer.h"
 
-class COpenGL2022View : public CView
+
+class COpenGLView : public CView
 {
 protected: // create from serialization only
-	COpenGL2022View() noexcept;
-	DECLARE_DYNCREATE(COpenGL2022View)
+	COpenGLView() noexcept;
+	DECLARE_DYNCREATE(COpenGLView)
 
 // Attributes
 public:
-	COpenGL2022Doc* GetDocument() const;
-	CGLRenderer m_glRenderer;
-	CPoint prev_mouse;
+	COpenGLDoc* GetDocument() const;
+	CGLRenderer* m_renderer;
 
 // Operations
 public:
@@ -31,7 +31,7 @@ protected:
 
 // Implementation
 public:
-	virtual ~COpenGL2022View();
+	virtual ~COpenGLView();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
@@ -43,20 +43,17 @@ protected:
 protected:
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
 	virtual void OnInitialUpdate();
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-//	afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 };
 
-#ifndef _DEBUG  // debug version in OpenGL_2022View.cpp
-inline COpenGL2022Doc* COpenGL2022View::GetDocument() const
-   { return reinterpret_cast<COpenGL2022Doc*>(m_pDocument); }
+#ifndef _DEBUG  // debug version in OpenGLView.cpp
+inline COpenGLDoc* COpenGLView::GetDocument() const
+   { return reinterpret_cast<COpenGLDoc*>(m_pDocument); }
 #endif
 

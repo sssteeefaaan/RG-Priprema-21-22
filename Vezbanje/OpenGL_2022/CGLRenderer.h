@@ -19,6 +19,16 @@ public:
 	void RotateView(double dXY, double dXZ);
 	void LookAt(float, float, float);
 	void Zoom(bool out);
+	void CalculatePosition();
+
+	void DrawCube(double a);
+	void DrawSphere(double r, int segNoAlpha, int segNoBeta, double* color1, double* color2);
+	void DrawCylinder(double r, double h, int segNoAlpha);
+	void DrawCylinderX(double r1, double r2, double h, int segNoAlpha);
+	void DrawCone(double r, double h, int segNoAlpha);
+	void DrawTorus(double r1, double r2, int segNoAlpha, int segNoBeta);
+
+	void DrawAxis(double size);
 
 protected:
 	HGLRC m_hrc;
