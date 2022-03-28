@@ -17,6 +17,8 @@
 #define new DEBUG_NEW
 #endif
 
+#include "Vezba_Osvetljenje.h"
+
 
 // COpenGLView
 
@@ -39,7 +41,7 @@ END_MESSAGE_MAP()
 
 COpenGLView::COpenGLView() noexcept
 {
-	this->m_renderer = new CGLRenderer();
+	this->m_renderer = new Vezba_Osvetljenje();
 }
 
 COpenGLView::~COpenGLView()

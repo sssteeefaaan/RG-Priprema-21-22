@@ -27,22 +27,25 @@ public:
 	CGLRenderer();
 	virtual ~CGLRenderer();
 
-	bool CreateGLContext(CDC* pDC);
-	void PrepareScene(CDC* pDC);
-	void Reshape(CDC* pDC, int w, int h);
-	void DrawScene(CDC* pDC);
-	void DestroyScene(CDC* pDC);
+	virtual bool CreateGLContext(CDC* pDC);
+	virtual void PrepareScene(CDC* pDC);
+	virtual void Reshape(CDC* pDC, int w, int h);
+	virtual void DrawScene(CDC* pDC);
+	virtual void DestroyScene(CDC* pDC);
 
-	void DrawAxes(double len = 50);
-	void CalculatePosition();
+	virtual void DrawAxes(double len = 50);
+	virtual void CalculatePosition();
 
-	void OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-	void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
+	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 
-	void DrawSide(double dx, double dy, int nStep = 16);
-	void DrawCuboid(double dx, double dy, double dz, int nStep = 16);
-	void DrawCylinder(double h, double r1, double r2, int nStep = 16);
-	void DrawSphere(double r, int nStep1 = 16, int nStep2 = 16);
-	void DrawTorus(double r1, double r2, int segNoAlpha = 16, int segNoBeta = 16);
+	virtual void DrawSide(double dx, double dy, int nStep = 16);
+	virtual void DrawCuboid(double dx, double dy, double dz, int nStep = 16);
+	virtual void DrawCylinder(double h, double r1, double r2, int nStep = 16);
+	virtual void DrawSphere(double r, int nStep1 = 16, int nStep2 = 16);
+	virtual void DrawTorus(double r1, double r2, int segNoAlpha = 16, int segNoBeta = 16);
+
+	virtual void Draw();
+	virtual void VectorProduct(double* a, double* b, double* nc);
 };
 

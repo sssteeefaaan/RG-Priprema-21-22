@@ -52,7 +52,7 @@ void CGLRenderer::PrepareScene(CDC* pDC)
 	wglMakeCurrent(pDC->m_hDC, m_hrc);
 	//--------------------------------
 
-	glClearColor(1, 1, 1, 1);
+	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
 
 	//--------------------------------
@@ -68,6 +68,7 @@ void CGLRenderer::Reshape(CDC* pDC, int w, int h)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(45, (double)w / (double)h, 1, 200);
+	glMatrixMode(GL_MODELVIEW);
 
 	//--------------------------------
 	wglMakeCurrent(NULL, NULL);
@@ -78,40 +79,45 @@ void CGLRenderer::DrawScene(CDC* pDC)
 	wglMakeCurrent(pDC->m_hDC, m_hrc);
 	//--------------------------------
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glMatrixMode(GL_MODELVIEW);
-	glEnable(GL_DEPTH_TEST);
 	glLoadIdentity();
 
 	gluLookAt(viewPosition[0], viewPosition[1], viewPosition[2],
 		lookingAt[0], lookingAt[1], lookingAt[2],
 		upVector[0], upVector[1], upVector[2]);
 
-	if (this->showAxes)
-		DrawAxes(50);
-
-	glTranslatef(0, 8, 0);
-
-	glColor4f(1, 1, 0, .75);
-	DrawCuboid(32, 16, 32);
-
-	glTranslatef(0, 16, 0);
-
-	glColor4f(1, 0, 0, .75);
-	DrawTorus(10, 8);
-
-	glColor4f(0, 0, 1, .75);
-	DrawCylinder(16, 16, 0);
-
-	glTranslatef(0, 13, 0);
-	
-	glColor4f(1, 0, 1, .75);
-	DrawSphere(5);
+	Draw();
 
 	//--------------------------------
 	glFlush();
 	SwapBuffers(pDC->m_hDC);
 	wglMakeCurrent(NULL, NULL);
+}
+
+void CGLRenderer::Draw()
+{
+	glLineWidth(2);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	if (this->showAxes)
+		DrawAxes(50);
+
+	glTranslatef(0, 8, 0);
+
+	glColor3f(1, 1, 0);
+	DrawCylinder(16, 16, 32);
+
+	glTranslatef(0, 16, 0);
+
+	glColor3f(1, 0, 0);
+	DrawTorus(10, 8);
+
+	glColor3f(0, 0, 1);
+	DrawCylinder(16, 16, 0);
+
+	glTranslatef(0, 13, 0);
+
+	glColor3f(1, 0, 1);
+	DrawSphere(5);
 }
 
 void CGLRenderer::DestroyScene(CDC* pDC)
@@ -274,7 +280,7 @@ void CGLRenderer::DrawSphere(double r, int nStep1, int nStep2)
 void CGLRenderer::DrawTorus(double r1, double r2, int segNoAlpha, int segNoBeta)
 {
 	double r = (r1 - r2) / 2,
-		rMid = r2 + 2,
+		rMid = r2 + r,
 		dAlpha = 2 * M_PI / segNoAlpha,
 		dBeta = 2 * M_PI / segNoBeta;
 
@@ -289,9 +295,19 @@ void CGLRenderer::DrawTorus(double r1, double r2, int segNoAlpha, int segNoBeta)
 		for (double j = 0; j > -(2 * M_PI + dBeta); j -= dBeta)
 		{
 			double cos_j = cos(j),
-				sin_j = sin(j);
+				sin_j = sin(j),
+				t[3]  { -sin_j, cos_j, 0 },
+				s1[3] { cos_j * -sin_i0, sin_j * -sin_i0, cos_i0 },
+				s2[3] { cos_j * -sin_i1, sin_j * -sin_i1, cos_i1 },
+				n1[3],
+				n2[3];
 
+			VectorProduct(t, s1, n1);
+			glNormal3dv(n1);
 			glVertex3f(cos_i0 * (rMid + cos_j * r), r * sin_j, sin_i0 * (rMid + cos_j * r));
+
+			VectorProduct(t, s2, n2);
+			glNormal3dv(n2);
 			glVertex3f(cos_i1 * (rMid + cos_j * r), r * sin_j, sin_i1 * (rMid + cos_j * r));
 		}
 		glEnd();
@@ -379,4 +395,16 @@ void CGLRenderer::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	default:
 		break;
 	}
+}
+
+void CGLRenderer::VectorProduct(double* a, double* b, double* nc)
+{
+	nc[0] = a[1] * b[2] - a[2] * b[1];
+	nc[1] = a[2] * b[0] - a[0] * b[2];
+	nc[2] = a[0] * b[1] - a[1] * b[0];
+
+	double lenght = sqrt(nc[0] * nc[0] + nc[1] * nc[1] + nc[2] * nc[2]);
+	nc[0] /= lenght;
+	nc[1] /= lenght;
+	nc[2] /= lenght;
 }
