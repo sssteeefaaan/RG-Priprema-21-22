@@ -185,7 +185,10 @@
   <ItemGroup>
     <ClInclude Include="CGLMaterial.h" />
     <ClInclude Include="CGLRenderer.h" />
+    <ClInclude Include="CGLTexture.h" />
+    <ClInclude Include="DImage.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Januar2022.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="OpenGL.h" />
     <ClInclude Include="OpenGLDoc.h" />
@@ -193,13 +196,17 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="Vezba_Osvetljenje.h" />
-    <ClInclude Include="Vezba_Primitive.h" />
-    <ClInclude Include="Vezba_Transformacije.h" />
+    <ClInclude Include="V_04_Teksture.h" />
+    <ClInclude Include="V_03_Osvetljenje.h" />
+    <ClInclude Include="V_01_Primitive.h" />
+    <ClInclude Include="V_02_Transformacije.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CGLMaterial.cpp" />
     <ClCompile Include="CGLRenderer.cpp" />
+    <ClCompile Include="CGLTexture.cpp" />
+    <ClCompile Include="DImage.cpp" />
+    <ClCompile Include="Januar2022.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="OpenGLDoc.cpp" />
@@ -210,9 +217,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Vezba_Osvetljenje.cpp" />
-    <ClCompile Include="Vezba_Primitive.cpp" />
-    <ClCompile Include="Vezba_Transformacije.cpp" />
+    <ClCompile Include="V_04_Teksture.cpp" />
+    <ClCompile Include="V_03_Osvetljenje.cpp" />
+    <ClCompile Include="V_01_Primitive.cpp" />
+    <ClCompile Include="V_02_Transformacije.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGL.rc" />

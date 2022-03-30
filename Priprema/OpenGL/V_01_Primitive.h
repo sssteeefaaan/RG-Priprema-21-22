@@ -1,11 +1,13 @@
 #pragma once
+
 #include "CGLRenderer.h"
-class Vezba_Primitive :
+
+class V_01_Primitive :
     public CGLRenderer
 {
 public:
-    Vezba_Primitive();
-    virtual ~Vezba_Primitive();
+    V_01_Primitive();
+    virtual ~V_01_Primitive();
     virtual void Draw();
 
     virtual void DrawCube(double dSize = 1);

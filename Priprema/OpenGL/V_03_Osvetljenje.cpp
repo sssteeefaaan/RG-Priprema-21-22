@@ -1,20 +1,21 @@
 #include "pch.h"
-#include "Vezba_Osvetljenje.h"
+#include "V_03_Osvetljenje.h"
 #include <gl/GLU.h>
 
 
-Vezba_Osvetljenje::Vezba_Osvetljenje()
+V_03_Osvetljenje::V_03_Osvetljenje()
     :CGLRenderer()
 {
     lookingAt[1] = 0;
     viewR = 10;
+    CalculatePosition();
 
     m_mat_teapot = new CGLMaterial();
     m_mat_cube = new CGLMaterial();
     m_mat_table = new CGLMaterial();
 }
 
-Vezba_Osvetljenje::~Vezba_Osvetljenje()
+V_03_Osvetljenje::~V_03_Osvetljenje()
 {
     if (m_mat_teapot)
     {
@@ -35,7 +36,7 @@ Vezba_Osvetljenje::~Vezba_Osvetljenje()
     }
 }
 
-void Vezba_Osvetljenje::PrepareScene(CDC* pDC)
+void V_03_Osvetljenje::PrepareScene(CDC* pDC)
 {
     wglMakeCurrent(pDC->m_hDC, m_hrc);
 
@@ -47,7 +48,7 @@ void Vezba_Osvetljenje::PrepareScene(CDC* pDC)
     wglMakeCurrent(NULL, NULL);
 }
 
-void Vezba_Osvetljenje::Draw()
+void V_03_Osvetljenje::Draw()
 {
     glPushMatrix();
 
@@ -72,7 +73,7 @@ void Vezba_Osvetljenje::Draw()
     glPopMatrix();
 }
 
-void Vezba_Osvetljenje::DrawSide(double dSize, int nSteps)
+void V_03_Osvetljenje::DrawSide(double dSize, int nSteps)
 {
     double dStep = dSize / nSteps;
 
@@ -89,7 +90,7 @@ void Vezba_Osvetljenje::DrawSide(double dSize, int nSteps)
     }
 }
 
-void Vezba_Osvetljenje::DrawCube(double dSize, int nSteps)
+void V_03_Osvetljenje::DrawCube(double dSize, int nSteps)
 {
     double aHalf = dSize / 2;
 
@@ -120,7 +121,7 @@ void Vezba_Osvetljenje::DrawCube(double dSize, int nSteps)
     glPopMatrix();
 }
 
-void Vezba_Osvetljenje::PrepareLighting()
+void V_03_Osvetljenje::PrepareLighting()
 {
     float temp[4]{ .2, .2 , .2, 1 };
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, temp);
@@ -139,7 +140,7 @@ void Vezba_Osvetljenje::PrepareLighting()
     glEnable(GL_LIGHTING);
 }
     
-void Vezba_Osvetljenje::PrepareMaterials()
+void V_03_Osvetljenje::PrepareMaterials()
 {
     m_mat_teapot->SetDiffuse(1, .7, .2, 1);
     m_mat_teapot->SetSpecular(1, .7, .2, 1);

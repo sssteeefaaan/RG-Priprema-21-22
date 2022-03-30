@@ -55,6 +55,10 @@ void CGLRenderer::PrepareScene(CDC* pDC)
 	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
 
+	PrepareMaterials();
+	PrepareTextures();
+	PrepareLighting();
+
 	//--------------------------------
 	wglMakeCurrent(NULL, NULL);
 }
@@ -407,4 +411,19 @@ void CGLRenderer::VectorProduct(double* a, double* b, double* nc)
 	nc[0] /= lenght;
 	nc[1] /= lenght;
 	nc[2] /= lenght;
+}
+
+void CGLRenderer::PrepareLighting()
+{
+
+}
+
+void CGLRenderer::PrepareMaterials()
+{
+
+}
+
+void CGLRenderer::PrepareTextures()
+{
+
 }

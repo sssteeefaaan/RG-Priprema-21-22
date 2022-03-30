@@ -1,7 +1,7 @@
 #include "pch.h"
-#include "Vezba_Primitive.h"
+#include "V_01_Primitive.h"
 
-Vezba_Primitive::Vezba_Primitive()
+V_01_Primitive::V_01_Primitive()
 	:CGLRenderer()
 {
 	lookingAt[1] = 0;
@@ -10,12 +10,12 @@ Vezba_Primitive::Vezba_Primitive()
 	CalculatePosition();
 }
 
-Vezba_Primitive::~Vezba_Primitive()
+V_01_Primitive::~V_01_Primitive()
 {
 
 }
 
-void Vezba_Primitive::Draw()
+void V_01_Primitive::Draw()
 {
 	if (showAxes)
 		DrawAxes(10);
@@ -36,7 +36,7 @@ void Vezba_Primitive::Draw()
 	DrawCube(1);
 }
 
-void Vezba_Primitive::DrawCube(double dSize)
+void V_01_Primitive::DrawCube(double dSize)
 {
 	double aHalf = dSize / 2;
 
@@ -77,7 +77,7 @@ void Vezba_Primitive::DrawCube(double dSize)
 	glEnd();
 }
 
-void Vezba_Primitive::DrawGrid(double dSize, double nSteps)
+void V_01_Primitive::DrawGrid(double dSize, double nSteps)
 {
 	double dStep = dSize / nSteps;
 
@@ -92,7 +92,7 @@ void Vezba_Primitive::DrawGrid(double dSize, double nSteps)
 	glEnd();
 }
 
-void Vezba_Primitive::DrawAxes(double len)
+void V_01_Primitive::DrawAxes(double len)
 {
 	glLineWidth(3);
 
@@ -111,7 +111,7 @@ void Vezba_Primitive::DrawAxes(double len)
 	glEnd();
 }
 
-void Vezba_Primitive::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+void V_01_Primitive::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	CGLRenderer::OnKeyDown(nChar, nRepCnt, nFlags);
 }

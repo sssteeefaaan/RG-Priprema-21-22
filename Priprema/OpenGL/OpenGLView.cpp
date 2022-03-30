@@ -17,7 +17,7 @@
 #define new DEBUG_NEW
 #endif
 
-#include "Vezba_Osvetljenje.h"
+#include "Januar2022.h"
 
 
 // COpenGLView
@@ -41,7 +41,7 @@ END_MESSAGE_MAP()
 
 COpenGLView::COpenGLView() noexcept
 {
-	this->m_renderer = new Vezba_Osvetljenje();
+	this->m_renderer = new Januar2022();
 }
 
 COpenGLView::~COpenGLView()

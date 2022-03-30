@@ -1,8 +1,8 @@
 #include "pch.h"
-#include "Vezba_Transformacije.h"
+#include "V_02_Transformacije.h"
 
-Vezba_Transformacije::Vezba_Transformacije()
-	:Vezba_Primitive()
+V_02_Transformacije::V_02_Transformacije()
+	:V_01_Primitive()
 {
 	m_body_rot =
 		m_head_rot =
@@ -11,18 +11,18 @@ Vezba_Transformacije::Vezba_Transformacije()
 	m_left_arm_rot = m_right_arm_rot = 180;
 	m_step = 5;
 }
-Vezba_Transformacije::~Vezba_Transformacije()
+V_02_Transformacije::~V_02_Transformacije()
 {
 
 }
 
-void Vezba_Transformacije::Draw()
+void V_02_Transformacije::Draw()
 {
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	DrawRobot();
 }
 
-void Vezba_Transformacije::DrawRobot()
+void V_02_Transformacije::DrawRobot()
 {
 	glPushMatrix();
 	{
@@ -87,7 +87,7 @@ void Vezba_Transformacije::DrawRobot()
 	glPopMatrix();
 }
 
-void Vezba_Transformacije::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+void V_02_Transformacije::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch (nChar)
 	{
@@ -131,5 +131,5 @@ void Vezba_Transformacije::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		break;
 	}
 
-	Vezba_Primitive::OnKeyDown(nChar, nRepCnt, nFlags);
+	V_01_Primitive::OnKeyDown(nChar, nRepCnt, nFlags);
 }

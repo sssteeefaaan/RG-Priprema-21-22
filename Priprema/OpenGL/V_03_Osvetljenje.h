@@ -1,8 +1,9 @@
 #pragma once
+
 #include "CGLRenderer.h"
 #include "CGLMaterial.h"
 
-class Vezba_Osvetljenje :
+class V_03_Osvetljenje :
     public CGLRenderer
 {
 protected:
@@ -11,8 +12,8 @@ protected:
         * m_mat_table;
 
 public:
-    Vezba_Osvetljenje();
-    virtual ~Vezba_Osvetljenje();
+    V_03_Osvetljenje();
+    virtual ~V_03_Osvetljenje();
     virtual void Draw();
     virtual void PrepareScene(CDC* pDC);
 

@@ -27,6 +27,10 @@ public:
 	CGLRenderer();
 	virtual ~CGLRenderer();
 
+	virtual void PrepareMaterials();
+	virtual void PrepareTextures();
+	virtual void PrepareLighting();
+
 	virtual bool CreateGLContext(CDC* pDC);
 	virtual void PrepareScene(CDC* pDC);
 	virtual void Reshape(CDC* pDC, int w, int h);

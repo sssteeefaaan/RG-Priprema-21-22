@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Vezbanje">
+      <UniqueIdentifier>{45f3dd4a-b420-4a4e-aa8d-86c6ca4fd794}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rokovi">
+      <UniqueIdentifier>{b184866c-8fee-4ebd-9744-66e1a2916255}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OpenGL.h">
@@ -42,17 +48,29 @@
     <ClInclude Include="CGLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vezba_Transformacije.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Vezba_Primitive.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CGLMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Vezba_Osvetljenje.h">
+    <ClInclude Include="CGLTexture.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="V_03_Osvetljenje.h">
+      <Filter>Vezbanje</Filter>
+    </ClInclude>
+    <ClInclude Include="V_01_Primitive.h">
+      <Filter>Vezbanje</Filter>
+    </ClInclude>
+    <ClInclude Include="V_02_Transformacije.h">
+      <Filter>Vezbanje</Filter>
+    </ClInclude>
+    <ClInclude Include="V_04_Teksture.h">
+      <Filter>Vezbanje</Filter>
+    </ClInclude>
+    <ClInclude Include="Januar2022.h">
+      <Filter>Rokovi</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -74,17 +92,29 @@
     <ClCompile Include="CGLRenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vezba_Transformacije.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Vezba_Primitive.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CGLMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Vezba_Osvetljenje.cpp">
+    <ClCompile Include="CGLTexture.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="V_03_Osvetljenje.cpp">
+      <Filter>Vezbanje</Filter>
+    </ClCompile>
+    <ClCompile Include="V_01_Primitive.cpp">
+      <Filter>Vezbanje</Filter>
+    </ClCompile>
+    <ClCompile Include="V_02_Transformacije.cpp">
+      <Filter>Vezbanje</Filter>
+    </ClCompile>
+    <ClCompile Include="V_04_Teksture.cpp">
+      <Filter>Vezbanje</Filter>
+    </ClCompile>
+    <ClCompile Include="Januar2022.cpp">
+      <Filter>Rokovi</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
