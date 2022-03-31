@@ -48,9 +48,6 @@
     <ClInclude Include="CGLRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CGLMaterial.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CGLTexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -70,6 +67,15 @@
       <Filter>Vezbanje</Filter>
     </ClInclude>
     <ClInclude Include="Januar2022.h">
+      <Filter>Rokovi</Filter>
+    </ClInclude>
+    <ClInclude Include="CGLMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Maj2021.h">
+      <Filter>Rokovi</Filter>
+    </ClInclude>
+    <ClInclude Include="Januar2021.h">
       <Filter>Rokovi</Filter>
     </ClInclude>
   </ItemGroup>
@@ -114,6 +120,12 @@
       <Filter>Vezbanje</Filter>
     </ClCompile>
     <ClCompile Include="Januar2022.cpp">
+      <Filter>Rokovi</Filter>
+    </ClCompile>
+    <ClCompile Include="Maj2021.cpp">
+      <Filter>Rokovi</Filter>
+    </ClCompile>
+    <ClCompile Include="Januar2021.cpp">
       <Filter>Rokovi</Filter>
     </ClCompile>
   </ItemGroup>

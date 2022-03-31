@@ -17,7 +17,7 @@
 #define new DEBUG_NEW
 #endif
 
-#include "Januar2022.h"
+#include "Januar2021.h"
 
 
 // COpenGLView
@@ -41,7 +41,7 @@ END_MESSAGE_MAP()
 
 COpenGLView::COpenGLView() noexcept
 {
-	this->m_renderer = new Januar2022();
+	this->m_renderer = new Januar2021();
 }
 
 COpenGLView::~COpenGLView()
