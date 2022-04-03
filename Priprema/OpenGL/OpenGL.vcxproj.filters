@@ -78,6 +78,9 @@
     <ClInclude Include="Januar2021.h">
       <Filter>Rokovi</Filter>
     </ClInclude>
+    <ClInclude Include="April2022.h">
+      <Filter>Rokovi</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="OpenGL.cpp">
@@ -126,6 +129,9 @@
       <Filter>Rokovi</Filter>
     </ClCompile>
     <ClCompile Include="Januar2021.cpp">
+      <Filter>Rokovi</Filter>
+    </ClCompile>
+    <ClCompile Include="April2022.cpp">
       <Filter>Rokovi</Filter>
     </ClCompile>
   </ItemGroup>
