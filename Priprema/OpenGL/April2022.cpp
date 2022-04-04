@@ -16,6 +16,7 @@ April2022::April2022()
 
 April2022::~April2022()
 {
+
 }
 
 UINT April2022::PrepareTextures(CString strTex)
