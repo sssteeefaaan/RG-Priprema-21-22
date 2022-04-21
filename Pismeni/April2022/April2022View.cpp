@@ -89,18 +89,25 @@ void CApril2022View::OnDraw(CDC* pDC)
 
 void CApril2022View::DrawCybin(CDC* pDC, int w, int d, COLORREF clr, CString str, int size)
 {
-	pDC->BeginPath();
 	pDC->MoveTo(-w / 2.0 - .5, 0);
+
+	pDC->BeginPath();
 	pDC->LineTo(-w / 2.0 - .5, w);
 	pDC->LineTo(w / 2.0 + .5, w);
 	pDC->LineTo(w / 2.0 + .5, 0);
 	pDC->ArcTo(CRect(-w / 2.0 - .5, -w / 2.0 - .5, w / 2.0 + .5, w / 2.0 + .5), CPoint(w / 2.0 + .5, 0), CPoint(-w / 2.0 - .5, 0));
 	pDC->EndPath();
 
+	COLORREF new_clr = clr;
+	BYTE *temp = (BYTE*)(&new_clr);
+	for (int i = 1; i < 4; i++)
+		temp[i] = min(temp[i] * 1.2 + .5, 255);
+
 	CPen* oldPen = pDC->SelectObject(new CPen(PS_SOLID, d, clr));
-	CBrush* oldBrush = pDC->SelectObject(new CBrush(min(255, clr * 1.2 + .5)));
+	CBrush* oldBrush = pDC->SelectObject(new CBrush(new_clr));
 
 	pDC->StrokeAndFillPath();
+
 	pDC->MoveTo(0, -w / 2.0 - .5);
 	// pDC->LineTo(0, -w / 2.0 - w * .25 - .5); Kratko, nije lepo
 	pDC->LineTo(0, -w);

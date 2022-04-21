@@ -18,8 +18,10 @@ public:
 // Operations
 public:
 	void WritePixel(CDC* pDC, int x, int y, COLORREF value);
+	void WritePixel4(CDC* pDC, int x, int y, COLORREF value);
+	void WritePixel8(CDC* pDC, int x, int y, COLORREF value);
 
-	// Algoritmi
+#pragma region Linija
 
 	// Nagibni
 	void NagibniAlgoritam(CDC* pDC, int x0, int y0, int x1, int y1, COLORREF value);
@@ -29,6 +31,44 @@ public:
 	// Inkrementalni
 	void InkrementalniAlgoritam(CDC* pDC, int x0, int y0, int x1, int y1, COLORREF value);
 	void InkrementalniAlgoritamFULL(CDC* pDC, int x0, int y0, int x1, int y1, COLORREF value);
+
+	// Bresenhem
+	void Bresenham(CDC* pDC, int x0, int y0, int x1, int y1, COLORREF value);
+	void BresenhamFULL(CDC* pDC, int x0, int y0, int x1, int y1, COLORREF value);
+
+#pragma endregion
+
+#pragma region Krug
+
+	// Trigonometrijski algoritam
+	void TrigCircle(CDC* pDC, int R, COLORREF value);
+	
+	// Polinomni algoritam
+	void PolinomialCircle(CDC* pDC, int R, COLORREF value);
+
+	// Bresenhemov algoritam
+	void BresenhamCircle(CDC* pDC, int R, COLORREF value);
+
+#pragma endregion
+
+#pragma region Elipsa
+
+	// Trigonometrijski algoritam
+	void TrigEllipse(CDC* pDC, int a, int b, COLORREF value);
+
+	// Polinomni algoritam
+	void PolinomialElipse(CDC* pDC, int a, int b, COLORREF value);
+
+	// Bresenhemov algoritam
+	// Nope
+
+	// Diferencijalni prvog i drugog reda
+	void I_DifferentialEllipse(CDC* pDC, int a, int b, COLORREF value);
+	void II_DifferentialEllipse(CDC* pDC, int a, int b, COLORREF value);
+
+	void Ellipse(CDC* pDC, int left, int top, int right, int bottom);
+
+#pragma endregion
 	
 	void Translate(CDC* pDC, float dX, float dY, bool rM = false);
 	void Rotate(CDC* pDC, float angle, bool rM = false);
